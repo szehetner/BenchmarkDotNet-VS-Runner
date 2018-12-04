@@ -1,0 +1,18 @@
+﻿<Window xmlns:Controls="clr-namespace:BenchmarkRunner.Controls;assembly=BenchmarkRunner" 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ControlTest"
+        xmlns:BenchmarkRunner="clr-namespace:BenchmarkRunner;assembly=BenchmarkRunner" x:Class="ControlTest.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Button Click="Button_Click">Run</Button>
+            </StackPanel>
+            <Controls:BenchmarkTree Name="treeView"/>
+        </StackPanel>
+    </Grid>
+</Window>
