@@ -69,6 +69,7 @@
     <Compile Include="Model\Discovery\IBenchmarkDiscoverer.cs" />
     <Compile Include="Model\Discovery\MethodVisitor.cs" />
     <Compile Include="Model\Discovery\WorkspaceBenchmarkDiscoverer.cs" />
+    <Compile Include="Model\Grouping.cs" />
     <Compile Include="ProjectSystem\CommonProjectPropertyProvider.cs" />
     <Compile Include="ProjectSystem\IProjectPropertyProvider.cs" />
     <Compile Include="ProjectSystem\LegacyProjectPropertyProvider.cs" />
@@ -89,6 +90,10 @@
     <Content Include="index.html" />
     <Content Include="Resources\BenchmarkTreeWindowCommand.png" />
     <Content Include="Resources\BenchmarkTreeWindowPackage.ico" />
+    <Resource Include="Resources\Class.png" />
+    <Resource Include="Resources\Method.png" />
+    <Resource Include="Resources\Namespace.png" />
+    <Resource Include="Resources\Project.png" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>

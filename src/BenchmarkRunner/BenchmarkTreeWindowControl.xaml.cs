@@ -1,6 +1,7 @@
 ﻿namespace BenchmarkRunner
 {
     using BenchmarkRunner.Model;
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Controls;
@@ -16,17 +17,18 @@
         public BenchmarkTreeWindowControl()
         {
             this.InitializeComponent();
+
+            _viewModel = new BenchmarkTreeViewModel();
+            BenchmarkTree.DataContext = _viewModel;
         }
 
-        public void Refresh(WorkspaceBenchmarkDiscoverer discoverer)
-        {
-            BenchmarkTreeViewModel viewModel = new BenchmarkTreeViewModel();
-            BenchmarkTree.DataContext = viewModel;
-
-            BenchmarkNodeBuilder nodeBuilder = new BenchmarkNodeBuilder();
-            nodeBuilder.RebuildNodes(viewModel.Nodes, discoverer);
-        }
+        private BenchmarkTreeViewModel _viewModel = new BenchmarkTreeViewModel();
 
         public BenchmarkTreeNode SelectedItem => BenchmarkTree.SelectedItem;
+
+        internal BenchmarkTreeViewModel GetViewModel()
+        {
+            return _viewModel;
+        }
     }
 }

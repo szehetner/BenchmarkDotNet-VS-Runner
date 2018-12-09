@@ -89,20 +89,20 @@
         </Strings>
       </Button>
 
-      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdCollapseAll" priority="0x0102" type="Button">
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdExpandAll" priority="0x0102" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarGroupByGroupID"/>
         <Icon guid="guidImages" id="bmpPicExpandAll" />
         <Strings>
-          <CommandName>cmdIdCollapseAll</CommandName>
+          <CommandName>cmdIdExpandAll</CommandName>
           <ButtonText>Expand All</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdExpandAll" priority="0x0103" type="Button">
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdCollapseAll" priority="0x0103" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarGroupByGroupID"/>
         <Icon guid="guidImages" id="bmpPicCollapseAll" />
         <Strings>
-          <CommandName>cmdIdExpandAll</CommandName>
+          <CommandName>cmdIdCollapseAll</CommandName>
           <ButtonText>Collapse All</ButtonText>
         </Strings>
       </Button>

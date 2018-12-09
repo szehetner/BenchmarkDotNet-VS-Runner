@@ -41,12 +41,18 @@ namespace ControlTest
                 {
                     Nodes = new ObservableCollection<BenchmarkTreeNode>()
                     {
-                        new ClassBenchmarkTreeNode("BenchmarkProject1", "BenchmarkClass1")
+                        new NamespaceBenchmarkTreeNode("BenchmarkProject1", "Namespace1.Namespace2")
                         {
                             Nodes = new ObservableCollection<BenchmarkTreeNode>
                             {
-                                new MethodBenchmarkTreeNode("BenchmarkProject1", "Method1"),
-                                new MethodBenchmarkTreeNode("BenchmarkProject1", "Method2"),
+                                new ClassBenchmarkTreeNode("BenchmarkProject1", "BenchmarkClass1")
+                                {
+                                    Nodes = new ObservableCollection<BenchmarkTreeNode>
+                                    {
+                                        new MethodBenchmarkTreeNode("BenchmarkProject1", "Method1"),
+                                        new MethodBenchmarkTreeNode("BenchmarkProject1", "Method2"),
+                                    }
+                                }
                             }
                         }
                     }
@@ -55,6 +61,26 @@ namespace ControlTest
             };
 
             treeView.DataContext = viewModel;
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void Change_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void ExpandAll_Click(object sender, RoutedEventArgs e)
+        {
+            ((BenchmarkTreeViewModel)treeView.DataContext).ExpandAll();
+        }
+
+        private void CollapseAll_Click(object sender, RoutedEventArgs e)
+        {
+            ((BenchmarkTreeViewModel)treeView.DataContext).CollapseAll();
         }
     }
 }

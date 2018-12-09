@@ -10,7 +10,10 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <Button Click="Button_Click">Run</Button>
+                <Button Click="Reset_Click">Reset</Button>
+                <Button Click="ExpandAll_Click">Expand All</Button>
+                <Button Click="CollapseAll_Click">Collapse All</Button>
+                <Button Click="Change_Click">Change Sorting</Button>
             </StackPanel>
             <Controls:BenchmarkTree Name="treeView"/>
         </StackPanel>

@@ -39,12 +39,12 @@ namespace BenchmarkRunner
         }
 
         private BenchmarkTreeWindowControl TreeWindowControl => (BenchmarkTreeWindowControl)Content;
-
-        public void Refresh(WorkspaceBenchmarkDiscoverer discoverer)
-        {
-            TreeWindowControl.Refresh(discoverer);
-        }
-
+        
         public BenchmarkTreeNode SelectedItem => TreeWindowControl.SelectedItem;
+
+        internal BenchmarkTreeViewModel GetViewModel()
+        {
+            return TreeWindowControl.GetViewModel();
+        }
     }
 }

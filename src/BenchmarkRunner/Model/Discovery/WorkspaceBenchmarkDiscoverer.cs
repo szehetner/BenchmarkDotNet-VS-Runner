@@ -59,10 +59,67 @@ namespace BenchmarkRunner.Model
             return new Benchmark
             {
                 Project = project.Name,
-                Namespace = methodSymbol.ContainingNamespace.Name,
+                Namespace = methodSymbol.ContainingNamespace.ToString(),
                 ClassName = methodSymbol.ContainingType.Name,
-                MethodName = methodSymbol.Name
+                MethodName = methodSymbol.Name,
+                Categories = GetCategories(methodSymbol)
             };
+        }
+
+        private List<string> GetCategories(IMethodSymbol methodSymbol)
+        {
+            List<string> categories = null;
+            System.Collections.Immutable.ImmutableArray<AttributeData> attributes = methodSymbol.GetAttributes();
+            if (attributes != null && attributes.Length > 0)
+            {
+                foreach (var attribute in attributes)
+                {
+                    if (attribute.AttributeClass.Name != "BenchmarkCategoryAttribute")
+                        continue;
+
+                    if (attribute.ConstructorArguments.Length == 0)
+                        continue;
+
+                    foreach (var argument in attribute.ConstructorArguments)
+                    {
+                        if (argument.Kind == TypedConstantKind.Array)
+                        {
+                            categories = ProcessArrayCategoryArgument(categories, argument);
+                        }
+                        else
+                        {
+                            categories = ProcessConstantCategoryArgument(categories, argument);
+                        }
+                    }
+                }
+            }
+            return categories;
+        }
+
+        private static List<string> ProcessArrayCategoryArgument(List<string> categories, TypedConstant argument)
+        {
+            foreach (var constant in argument.Values)
+            {
+                categories = ProcessConstantCategoryArgument(categories, constant);
+            }
+
+            return categories;
+        }
+
+        private static List<string> ProcessConstantCategoryArgument(List<string> categories, TypedConstant constant)
+        {
+            if (constant.Type.SpecialType == SpecialType.System_String)
+            {
+                if (constant.Value != null)
+                {
+                    if (categories == null)
+                        categories = new List<string>();
+
+                    categories.Add(constant.Value.ToString());
+                }
+            }
+
+            return categories;
         }
     }
 }

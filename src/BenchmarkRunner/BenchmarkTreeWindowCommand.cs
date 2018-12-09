@@ -33,6 +33,9 @@ namespace BenchmarkRunner
         public const int cmdIdRefresh = 0x131;
         public const int cmdIdGroupBy = 0x132;
         public const int cmdIdGroupByList = 0x137;
+        public const int cmdIdExpandAll = 0x133;
+        public const int cmdIdCollapseAll = 0x134;
+        
         public const int ToolbarID = 0x1000;
 
         /// <summary>
@@ -64,20 +67,19 @@ namespace BenchmarkRunner
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
-            var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new MenuCommand(this.Execute, menuCommandID);
-            commandService.AddCommand(menuItem);
-
+            commandService.AddCommand(new MenuCommand(ShowToolWindow, new CommandID(CommandSet, CommandId)));
 
             commandService.AddCommand(new OleMenuCommand(GroupByHandler, new CommandID(CommandSet, cmdIdGroupBy)));
             commandService.AddCommand(new OleMenuCommand(GroupByListHandler, new CommandID(CommandSet, cmdIdGroupByList)));
 
             commandService.AddCommand(new MenuCommand(new EventHandler(RunBenchmarks), new CommandID(CommandSet, cmdIdRun)));
             commandService.AddCommand(new MenuCommand(new EventHandler(Refresh), new CommandID(CommandSet, cmdIdRefresh)));
-            
+
+            commandService.AddCommand(new MenuCommand(new EventHandler(ExpandAll), new CommandID(CommandSet, cmdIdExpandAll)));
+            commandService.AddCommand(new MenuCommand(new EventHandler(CollapseAll), new CommandID(CommandSet, cmdIdCollapseAll)));
         }
 
-        private string selectedGrouping = "Namespace, Class";
+        private string selectedGrouping = GroupName.PROJECT_CLASS;
 
         private void GroupByHandler(object sender, EventArgs eventArgs)
         {
@@ -101,7 +103,10 @@ namespace BenchmarkRunner
             }
             else if (newChoice != null && newChoice != selectedGrouping)
             {
-                // TODO: change grouping
+                selectedGrouping = newChoice;
+
+                var viewModel = GetTreeViewModel();
+                viewModel.SetGrouping(GroupName.GetValue(selectedGrouping));
             }
         }
 
@@ -110,25 +115,35 @@ namespace BenchmarkRunner
             var args = eventArgs as OleMenuCmdEventArgs;
             if (args == null)
                 return;
-
-            string[] groupByOptions = new string[]
-            {
-                "Class",
-                "Namespace, Class",
-                "Category, Class",
-            };
-
-            Marshal.GetNativeVariantForObject(groupByOptions, args.OutValue);
+            
+            Marshal.GetNativeVariantForObject(GroupName.AllNames, args.OutValue);
         }
 
         private async void Refresh(object sender, EventArgs arguments)
         {
-            var toolWindow = (BenchmarkTreeWindow)this.package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, false);
-
             var discoverer = new WorkspaceBenchmarkDiscoverer(Workspace);
             await discoverer.InitializeAsync();
 
-            toolWindow.Refresh(discoverer);
+            var viewModel = GetTreeViewModel();
+            viewModel.Refresh(discoverer, GroupName.GetValue(selectedGrouping));
+        }
+
+        private void ExpandAll(object sender, EventArgs arguments)
+        {
+            var viewModel = GetTreeViewModel();
+            viewModel.ExpandAll();
+        }
+
+        private void CollapseAll(object sender, EventArgs arguments)
+        {
+            var viewModel = GetTreeViewModel();
+            viewModel.CollapseAll();
+        }
+
+        private BenchmarkTreeViewModel GetTreeViewModel()
+        {
+            var toolWindow = (BenchmarkTreeWindow)this.package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, false);
+            return toolWindow.GetViewModel();
         }
 
         private EnvDTE.Project GetProject(DTE2 dte2, string name)
@@ -237,7 +252,7 @@ namespace BenchmarkRunner
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
-        private void Execute(object sender, EventArgs e)
+        private void ShowToolWindow(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
