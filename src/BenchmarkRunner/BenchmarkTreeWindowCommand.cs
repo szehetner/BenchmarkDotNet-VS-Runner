@@ -30,6 +30,7 @@ namespace BenchmarkRunner
         public const string guidBenchmarkTreeWindowPackageCmdSet = "322958f6-2403-49a7-ab0f-943c0e2011e5"; 
         public const uint cmdIdToolbarCommands = 0x100;
         public const int cmdIdRun = 0x135;
+        public const int cmdIdRunDry = 0x136;
         public const int cmdIdRefresh = 0x131;
         public const int cmdIdGroupBy = 0x132;
         public const int cmdIdGroupByList = 0x137;
@@ -69,14 +70,16 @@ namespace BenchmarkRunner
 
             commandService.AddCommand(new MenuCommand(ShowToolWindow, new CommandID(CommandSet, CommandId)));
 
-            commandService.AddCommand(new OleMenuCommand(GroupByHandler, new CommandID(CommandSet, cmdIdGroupBy)));
-            commandService.AddCommand(new OleMenuCommand(GroupByListHandler, new CommandID(CommandSet, cmdIdGroupByList)));
-
-            commandService.AddCommand(new MenuCommand(new EventHandler(RunBenchmarks), new CommandID(CommandSet, cmdIdRun)));
             commandService.AddCommand(new MenuCommand(new EventHandler(Refresh), new CommandID(CommandSet, cmdIdRefresh)));
+            
+            commandService.AddCommand(new MenuCommand(new EventHandler(RunNormal), new CommandID(CommandSet, cmdIdRun)));
+            commandService.AddCommand(new MenuCommand(new EventHandler(RunDry), new CommandID(CommandSet, cmdIdRunDry)));
 
             commandService.AddCommand(new MenuCommand(new EventHandler(ExpandAll), new CommandID(CommandSet, cmdIdExpandAll)));
             commandService.AddCommand(new MenuCommand(new EventHandler(CollapseAll), new CommandID(CommandSet, cmdIdCollapseAll)));
+
+            commandService.AddCommand(new OleMenuCommand(GroupByHandler, new CommandID(CommandSet, cmdIdGroupBy)));
+            commandService.AddCommand(new OleMenuCommand(GroupByListHandler, new CommandID(CommandSet, cmdIdGroupByList)));
         }
 
         private string selectedGrouping = GroupName.PROJECT_CLASS;
@@ -156,7 +159,17 @@ namespace BenchmarkRunner
             throw new Exception("Unexpected Project: " + name);
         }
 
-        private async void RunBenchmarks(object sender, EventArgs arguments)
+        private async void RunNormal(object sender, EventArgs arguments)
+        {
+            await RunAsync(false);
+        }
+
+        private async void RunDry(object sender, EventArgs arguments)
+        {
+            await RunAsync(true);
+        }
+
+        private async Task RunAsync(bool isDryRun)
         {
             try
             {
@@ -198,13 +211,14 @@ namespace BenchmarkRunner
                 {
                     OutputPath = propertyProvider.OutputPath,
                     Runtime = propertyProvider.TargetRuntime,
-                    AssemblyPath = propertyProvider.GetOutputFilename()
-
+                    AssemblyPath = propertyProvider.GetOutputFilename(),
+                    IsDryRun = isDryRun,
+                    SelectedNode = selectedNode
                 };
                 BenchmarkRunController runController = new BenchmarkRunController(runParameters);
                 await runController.RunAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await ShowError(ex.Message);
             }

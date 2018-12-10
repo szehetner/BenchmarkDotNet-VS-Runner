@@ -76,6 +76,8 @@
     <Compile Include="ProjectSystem\ProjectPropertyProviderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner\BenchmarkRunController.cs" />
+    <Compile Include="Runner\RunParameters.cs" />
+    <Compile Include="Runner\TargetRuntime.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
@@ -94,6 +96,7 @@
     <Resource Include="Resources\Method.png" />
     <Resource Include="Resources\Namespace.png" />
     <Resource Include="Resources\Project.png" />
+    <Resource Include="Resources\Category.png" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>

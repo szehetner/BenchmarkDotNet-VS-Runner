@@ -12,31 +12,31 @@
             <TreeView Name="trvBenchmarks" ItemsSource="{Binding Nodes}" BorderThickness="0">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type model:ProjectBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                        <StackPanel Orientation="Horizontal" Margin="0,1">
                             <Image Source="/BenchmarkRunner;component/Resources/Project.png" />
                             <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type model:NamespaceBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                        <StackPanel Orientation="Horizontal" Margin="0,1">
                             <Image Source="/BenchmarkRunner;component/Resources/Namespace.png" />
                             <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type model:CategoryBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                            <Image Source="/BenchmarkRunner;component/Resources/Namespace.png" />
+                        <StackPanel Orientation="Horizontal" Margin="0,1">
+                            <Image Source="/BenchmarkRunner;component/Resources/Category.png" />
                             <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type model:ClassBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                        <StackPanel Orientation="Horizontal" Margin="0,1">
                             <Image Source="/BenchmarkRunner;component/Resources/Class.png" />
                             <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type model:MethodBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                        <StackPanel Orientation="Horizontal" Margin="0,1">
                             <Image Source="/BenchmarkRunner;component/Resources/Method.png" />
                             <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
                         </StackPanel>

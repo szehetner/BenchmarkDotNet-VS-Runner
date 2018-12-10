@@ -41,16 +41,16 @@ namespace ControlTest
                 {
                     Nodes = new ObservableCollection<BenchmarkTreeNode>()
                     {
-                        new NamespaceBenchmarkTreeNode("BenchmarkProject1", "Namespace1.Namespace2")
+                        new NamespaceBenchmarkTreeNode(null, "Namespace1.Namespace2")
                         {
                             Nodes = new ObservableCollection<BenchmarkTreeNode>
                             {
-                                new ClassBenchmarkTreeNode("BenchmarkProject1", "BenchmarkClass1")
+                                new ClassBenchmarkTreeNode(null, null, "BenchmarkClass1")
                                 {
                                     Nodes = new ObservableCollection<BenchmarkTreeNode>
                                     {
-                                        new MethodBenchmarkTreeNode("BenchmarkProject1", "Method1"),
-                                        new MethodBenchmarkTreeNode("BenchmarkProject1", "Method2"),
+                                        new MethodBenchmarkTreeNode(null, null, "Method1"),
+                                        new MethodBenchmarkTreeNode(null, null, "Method2"),
                                     }
                                 }
                             }

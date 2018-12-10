@@ -6,12 +6,12 @@ namespace BenchmarkRunner.Model
 {
     public class BenchmarkTreeNode : INotifyPropertyChanged
     {
-        public string ProjectName { get; set; }
         public string NodeName { get; set; }
-        public string FullName { get; set; }
         public ObservableCollection<BenchmarkTreeNode> Nodes { get; set; }
 
-        private bool _isExpanded;
+        public BenchmarkTreeNode Parent { get; set; }
+
+        private bool _isExpanded = true;
         public bool IsExpanded
         {
             get { return _isExpanded; }
@@ -22,9 +22,21 @@ namespace BenchmarkRunner.Model
             }
         }
 
-        public BenchmarkTreeNode(string projectName, string nodeName)
+        public string ProjectName
         {
-            ProjectName = projectName;
+            get
+            {
+                BenchmarkTreeNode current = this;
+                while (!(current is ProjectBenchmarkTreeNode))
+                    current = current.Parent;
+
+                return current.NodeName;
+            }
+        }
+
+        public BenchmarkTreeNode(BenchmarkTreeNode parent, string nodeName)
+        {
+            Parent = parent;
             NodeName = nodeName;
             Nodes = new ObservableCollection<BenchmarkTreeNode>();
         }
@@ -39,36 +51,62 @@ namespace BenchmarkRunner.Model
 
     public class ProjectBenchmarkTreeNode : BenchmarkTreeNode
     {
-        public ProjectBenchmarkTreeNode(string projectName) : base(projectName, projectName)
+        public ProjectBenchmarkTreeNode(string projectName) : base(null, projectName)
         {
         }
     }
 
     public class NamespaceBenchmarkTreeNode : BenchmarkTreeNode
     {
-        public NamespaceBenchmarkTreeNode(string projectName, string namespaceName) : base(projectName, namespaceName)
+        public NamespaceBenchmarkTreeNode(BenchmarkTreeNode parent, string namespaceName) : base(parent, namespaceName)
         {
+        }
+
+        public string FullName
+        {
+            get
+            {
+                string fullName = "";
+                BenchmarkTreeNode current = this;
+                while (current is NamespaceBenchmarkTreeNode ns)
+                {
+                    fullName = current.NodeName + "." + fullName;
+                    current = current.Parent;
+                }
+
+                return fullName;
+            }
         }
     }
 
     public class CategoryBenchmarkTreeNode : BenchmarkTreeNode
     {
-        public CategoryBenchmarkTreeNode(string projectName, string categoryName) : base(projectName, categoryName)
+        public CategoryBenchmarkTreeNode(BenchmarkTreeNode parent, string categoryName) : base(parent, categoryName)
         {
         }
     }
 
     public class ClassBenchmarkTreeNode : BenchmarkTreeNode
     {
-        public ClassBenchmarkTreeNode(string projectName, string className) : base(projectName, className)
+        private Benchmark _benchmark;
+
+        public ClassBenchmarkTreeNode(BenchmarkTreeNode parent, Benchmark benchmark, string className) : base(parent, className)
         {
+            _benchmark = benchmark;
         }
+
+        public string FullName => _benchmark.Namespace + "." + _benchmark.ClassName;
     }
 
     public class MethodBenchmarkTreeNode : BenchmarkTreeNode
     {
-        public MethodBenchmarkTreeNode(string projectName, string methodName) : base(projectName, methodName)
+        private Benchmark _benchmark;
+
+        public MethodBenchmarkTreeNode(BenchmarkTreeNode parent, Benchmark benchmark, string methodName) : base(parent, methodName)
         {
+            _benchmark = benchmark;
         }
+
+        public string FullName => _benchmark.Namespace + "." + _benchmark.ClassName + "." + _benchmark.MethodName;
     }
 }

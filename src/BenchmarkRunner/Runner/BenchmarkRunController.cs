@@ -33,21 +33,14 @@ namespace BenchmarkRunner.Runner
 
         private string BuildArguments()
         {
-            return "/k " + _parameters.AssemblyPath + " -j Dry --filter *";
+            string arguments = "/k " + _parameters.AssemblyPath;
+
+            if (_parameters.IsDryRun)
+                arguments += " -j Dry";
+
+            arguments += " " + _parameters.BuildFilter();
+
+            return arguments;
         }
-    }
-    
-    public enum TargetRuntime
-    {
-        NetCore,
-        NetFramework
-    }
-    
-    public class RunParameters
-    {
-        public TargetRuntime Runtime { get; set; }
-        public string OutputPath { get; set; }
-        public string AssemblyPath { get; set; }
-        public string SelectedBenchmark { get; set; }
     }
 }

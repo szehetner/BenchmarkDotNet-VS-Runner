@@ -47,8 +47,8 @@ namespace BenchmarkRunner.Model
         private void BuildProjectClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
         {
             var projectNode = GetOrInsertNode(nodeList, benchmark.Project, () => CreateProjectNode(benchmark));
-            var classNode = GetOrInsertNode(projectNode.Nodes, benchmark.ClassName, () => CreateClassNode(benchmark));
-            GetOrInsertNode(classNode.Nodes, benchmark.MethodName, () => CreateMethodNode(benchmark));
+            var classNode = GetOrInsertNode(projectNode, benchmark.ClassName, p => CreateClassNode(p, benchmark));
+            GetOrInsertNode(classNode, benchmark.MethodName, p => CreateMethodNode(p, benchmark));
         }
 
         private void BuildNamespaceClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
@@ -59,11 +59,11 @@ namespace BenchmarkRunner.Model
             string[] namespaceParts = benchmark.Namespace.Split('.');
             foreach (var namespacePart in namespaceParts)
             {
-                lastNamespaceNode = GetOrInsertNode(lastNamespaceNode.Nodes, namespacePart, () => CreateNamespaceNode(benchmark, namespacePart));
+                lastNamespaceNode = GetOrInsertNode(lastNamespaceNode, namespacePart, p => CreateNamespaceNode(p, namespacePart));
             }
 
-            var classNode = GetOrInsertNode(lastNamespaceNode.Nodes, benchmark.ClassName, () => CreateClassNode(benchmark));
-            GetOrInsertNode(classNode.Nodes, benchmark.MethodName, () => CreateMethodNode(benchmark));
+            var classNode = GetOrInsertNode(lastNamespaceNode, benchmark.ClassName, p => CreateClassNode(p, benchmark));
+            GetOrInsertNode(classNode, benchmark.MethodName, p => CreateMethodNode(p, benchmark));
         }
 
         private void BuildCategoryClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
@@ -71,10 +71,34 @@ namespace BenchmarkRunner.Model
             var projectNode = GetOrInsertNode(nodeList, benchmark.Project, () => CreateProjectNode(benchmark));
             foreach (string category in benchmark.Categories)
             {
-                var categoryNode = GetOrInsertNode(projectNode.Nodes, category, () => CreateCategoryNode(benchmark, category));
-                var classNode = GetOrInsertNode(categoryNode.Nodes, benchmark.ClassName, () => CreateClassNode(benchmark));
-                GetOrInsertNode(classNode.Nodes, benchmark.MethodName, () => CreateMethodNode(benchmark));
+                var categoryNode = GetOrInsertNode(projectNode, category, p => CreateCategoryNode(p, category));
+                var classNode = GetOrInsertNode(categoryNode, benchmark.ClassName, p => CreateClassNode(p, benchmark));
+                GetOrInsertNode(classNode, benchmark.MethodName, p => CreateMethodNode(p, benchmark));
             }
+        }
+
+        private BenchmarkTreeNode GetOrInsertNode(BenchmarkTreeNode parent, string nodeName, Func<BenchmarkTreeNode, BenchmarkTreeNode> createFunc)
+        {
+            int previousIndex = 0;
+            foreach (var currentNode in parent.Nodes)
+            {
+                int comparisonResult = string.Compare(currentNode.NodeName, nodeName);
+
+                if (comparisonResult == 0)
+                {
+                    return currentNode;
+                }
+                else if (comparisonResult < 0)
+                {
+                    break;
+                }
+
+                previousIndex++;
+            }
+
+            var newNode = createFunc(parent);
+            parent.Nodes.Insert(previousIndex, newNode);
+            return newNode;
         }
 
         private BenchmarkTreeNode GetOrInsertNode(ObservableCollection<BenchmarkTreeNode> collection, string nodeName, Func<BenchmarkTreeNode> createFunc)
@@ -106,24 +130,24 @@ namespace BenchmarkRunner.Model
             return new ProjectBenchmarkTreeNode(benchmark.Project);
         }
 
-        private BenchmarkTreeNode CreateNamespaceNode(Benchmark benchmark, string namespacePart)
+        private BenchmarkTreeNode CreateNamespaceNode(BenchmarkTreeNode parent, string namespacePart)
         {
-            return new NamespaceBenchmarkTreeNode(benchmark.Project, namespacePart);
+            return new NamespaceBenchmarkTreeNode(parent, namespacePart);
         }
 
-        private BenchmarkTreeNode CreateCategoryNode(Benchmark benchmark, string category)
+        private BenchmarkTreeNode CreateCategoryNode(BenchmarkTreeNode parent, string category)
         {
-            return new CategoryBenchmarkTreeNode(benchmark.Project, category);
+            return new CategoryBenchmarkTreeNode(parent, category);
         }
 
-        private BenchmarkTreeNode CreateClassNode(Benchmark benchmark)
+        private BenchmarkTreeNode CreateClassNode(BenchmarkTreeNode parent, Benchmark benchmark)
         {
-            return new ClassBenchmarkTreeNode(benchmark.Project, benchmark.ClassName);
+            return new ClassBenchmarkTreeNode(parent, benchmark, benchmark.ClassName);
         }
 
-        private BenchmarkTreeNode CreateMethodNode(Benchmark benchmark)
+        private BenchmarkTreeNode CreateMethodNode(BenchmarkTreeNode parent, Benchmark benchmark)
         {
-            return new MethodBenchmarkTreeNode(benchmark.Project, benchmark.MethodName);
+            return new MethodBenchmarkTreeNode(parent, benchmark, benchmark.MethodName);
         }
     }
 }
