@@ -7,48 +7,50 @@
              xmlns:model="clr-namespace:BenchmarkRunner.Model"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <StackPanel>
-            <TreeView Name="trvBenchmarks" ItemsSource="{Binding Nodes}" BorderThickness="0">
-                <TreeView.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type model:ProjectBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,1">
-                            <Image Source="/BenchmarkRunner;component/Resources/Project.png" />
-                            <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type model:NamespaceBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,1">
-                            <Image Source="/BenchmarkRunner;component/Resources/Namespace.png" />
-                            <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type model:CategoryBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,1">
-                            <Image Source="/BenchmarkRunner;component/Resources/Category.png" />
-                            <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type model:ClassBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,1">
-                            <Image Source="/BenchmarkRunner;component/Resources/Class.png" />
-                            <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type model:MethodBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                        <StackPanel Orientation="Horizontal" Margin="0,1">
-                            <Image Source="/BenchmarkRunner;component/Resources/Method.png" />
-                            <TextBlock Text="{Binding NodeName}" Margin="3,0,0,0" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.Resources>
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="TreeViewItem">
-                        <!--<Setter Property="IsSelected" Value="{Binding IsSelected}" />-->
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    </Style>
-                </TreeView.ItemContainerStyle>
-            </TreeView>
-        </StackPanel>
-    </Grid>
+    <DockPanel>
+        <TreeView Name="trvBenchmarks" ItemsSource="{Binding Nodes}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type model:ProjectBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
+                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <Image Source="/BenchmarkRunner;component/Resources/Project.png" />
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
+                        <TextBlock Text="{Binding NodeCount}" Margin="3,0,0,0" Foreground="#FF595959" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type model:NamespaceBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
+                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <Image Source="/BenchmarkRunner;component/Resources/Namespace.png" />
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
+                        <TextBlock Text="{Binding NodeCount}" Margin="3,0,0,0" Foreground="#FF595959" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type model:CategoryBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
+                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <Image Source="/BenchmarkRunner;component/Resources/Category.png" />
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
+                        <TextBlock Text="{Binding NodeCount}" Margin="3,0,0,0" Foreground="#FF595959" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type model:ClassBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
+                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <Image Source="/BenchmarkRunner;component/Resources/Class.png" />
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
+                        <TextBlock Text="{Binding NodeCount}" Margin="3,0,0,0" Foreground="#FF595959" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type model:MethodBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
+                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <Image Source="/BenchmarkRunner;component/Resources/Method.png" />
+                        <TextBlock x:Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <!--<Setter Property="IsSelected" Value="{Binding IsSelected}" />-->
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
+    </DockPanel>
 </UserControl>

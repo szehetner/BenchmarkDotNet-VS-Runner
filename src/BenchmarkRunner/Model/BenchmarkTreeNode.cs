@@ -7,6 +7,7 @@ namespace BenchmarkRunner.Model
     public class BenchmarkTreeNode : INotifyPropertyChanged
     {
         public string NodeName { get; set; }
+        public string NodeCount => "(" + Nodes.Count + ")";
         public ObservableCollection<BenchmarkTreeNode> Nodes { get; set; }
 
         public BenchmarkTreeNode Parent { get; set; }

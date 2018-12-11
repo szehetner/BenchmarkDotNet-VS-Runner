@@ -10,8 +10,6 @@
              d:DesignHeight="300" d:DesignWidth="300"
              Name="MyToolWindow">
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <Controls:BenchmarkTree x:Name="BenchmarkTree" />
-        </StackPanel>
+        <Controls:BenchmarkTree x:Name="BenchmarkTree" />
     </Grid>
 </UserControl>

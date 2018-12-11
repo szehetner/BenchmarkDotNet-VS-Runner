@@ -15,7 +15,9 @@
                 <Button Click="CollapseAll_Click">Collapse All</Button>
                 <Button Click="Change_Click">Change Sorting</Button>
             </StackPanel>
-            <Controls:BenchmarkTree Name="treeView"/>
+            <Grid>
+                <Controls:BenchmarkTree Name="treeView"/>
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>
