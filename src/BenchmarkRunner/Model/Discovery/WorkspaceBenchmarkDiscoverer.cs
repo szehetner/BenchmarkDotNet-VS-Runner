@@ -58,11 +58,14 @@ namespace BenchmarkRunner.Model
 
             return new Benchmark
             {
-                Project = project.Name,
+                ProjectName = project.Name,
                 Namespace = methodSymbol.ContainingNamespace.ToString(),
                 ClassName = methodSymbol.ContainingType.Name,
                 MethodName = methodSymbol.Name,
-                Categories = GetCategories(methodSymbol)
+                Categories = GetCategories(methodSymbol),
+                MethodSymbol = methodSymbol,
+                ClassSymbol = methodSymbol.ContainingType,
+                Project = project
             };
         }
 

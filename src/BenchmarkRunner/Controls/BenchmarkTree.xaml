@@ -11,9 +11,22 @@
         <TreeView Name="trvBenchmarks" ItemsSource="{Binding Nodes}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <TreeView.Resources>
                 <ContextMenu x:Key="NodeContextMenu">
-                    <MenuItem Name="RunSelected" Header="Run Selected" Command="{Binding RunSelectedCommand}" />
+                    <MenuItem Name="Run" Header="Run" Command="{Binding RunSelectedCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/BenchmarkRunner;component/Resources/Run.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Name="RunDry" Header="Run Once (Dry Run)" Command="{Binding DryRunSelectedCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/BenchmarkRunner;component/Resources/RunChecked.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator/>
-                    <MenuItem Name="GotoCode" Header="Go To Code" Command="{Binding GoToCodeCommand}" />
+                    <MenuItem Name="GotoCode" Header="Go To Code" Command="{Binding GoToCodeCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/BenchmarkRunner;component/Resources/GoToDeclaration.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
                 <HierarchicalDataTemplate DataType="{x:Type model:ProjectBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal" Margin="0,1">
@@ -32,9 +45,6 @@
                                             </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
                                         </MultiDataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
-                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
-                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Resources>
@@ -59,9 +69,6 @@
                                             </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
                                         </MultiDataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
-                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
-                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Resources>
@@ -86,9 +93,6 @@
                                             </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
                                         </MultiDataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
-                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
-                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Resources>
@@ -113,9 +117,6 @@
                                             </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
                                         </MultiDataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
-                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
-                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Resources>
@@ -140,9 +141,6 @@
                                             </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
                                         </MultiDataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
-                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
-                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Resources>

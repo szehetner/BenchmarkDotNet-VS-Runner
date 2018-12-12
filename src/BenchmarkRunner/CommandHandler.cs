@@ -6,19 +6,21 @@ using Task = System.Threading.Tasks.Task;
 using BenchmarkRunner.Model;
 using BenchmarkRunner.ProjectSystem;
 using BenchmarkRunner.Runner;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.LanguageServices;
+using System.Threading;
+using Microsoft.CodeAnalysis;
 
 namespace BenchmarkRunner
 {
     public class CommandHandler
     {
         private AsyncPackage _package;
-        private IServiceProvider _serviceProvider;
+        private readonly VisualStudioWorkspace _workspace;
 
-        public CommandHandler(AsyncPackage package, IServiceProvider serviceProvider)
+        public CommandHandler(BenchmarkTreeWindowCommand commands)
         {
-            _package = package;
-            _serviceProvider = serviceProvider;
+            _package = commands.ParentPackage;
+            _workspace = commands.Workspace;
         }
 
         public async Task RunAsync(bool isDryRun)
@@ -43,7 +45,7 @@ namespace BenchmarkRunner
                 {
                     if (!propertyProvider.IsOptimized)
                     {
-                        await UIHelper.ShowErrorAsync(_serviceProvider,
+                        await UIHelper.ShowErrorAsync(_package,
                             "The current build configuration does not have the \"Optimize code\" flag set and is therefore not suitable for running Benchmarks.\r\n\r\nPlease enable the the \"Optimize code\" flag (under Project Properties -> Build) or switch to a non-debug configuration (e.g. 'Release') before running a Benchmark.");
                         return;
                     }
@@ -72,13 +74,20 @@ namespace BenchmarkRunner
             }
             catch (Exception ex)
             {
-                await UIHelper.ShowErrorAsync(_serviceProvider, ex.Message);
+                await UIHelper.ShowErrorAsync(_package, ex.Message);
             }
         }
 
-        internal Task<Task> GoToCodeAsync()
+        internal async Task GoToCodeAsync(Project project, ISymbol targetSymbol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _workspace.TryGoToDefinition(targetSymbol, project, CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                await UIHelper.ShowErrorAsync(_package, ex.Message);
+            }
         }
 
         private EnvDTE.Project GetProject(DTE2 dte2, string name)

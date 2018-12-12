@@ -1,4 +1,5 @@
 ﻿using BenchmarkRunner.Controls.Helper;
+using Microsoft.CodeAnalysis;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -16,6 +17,7 @@ namespace BenchmarkRunner.Model
         public BenchmarkTreeNode Parent { get; set; }
 
         public AsyncDelegateCommand RunSelectedCommand { get; }
+        public AsyncDelegateCommand DryRunSelectedCommand { get; }
         public AsyncDelegateCommand GoToCodeCommand { get; }
 
         private bool _isExpanded = true;
@@ -52,6 +54,10 @@ namespace BenchmarkRunner.Model
             }
         }
 
+        public virtual bool SupportsGoToCode => false;
+        public virtual Benchmark Benchmark => null;
+        public virtual ISymbol TargetSymbol => null;
+
         public BenchmarkTreeNode(BenchmarkTreeNode parent, string nodeName)
         {
             Parent = parent;
@@ -59,7 +65,8 @@ namespace BenchmarkRunner.Model
             Nodes = new ObservableCollection<BenchmarkTreeNode>();
 
             RunSelectedCommand = new AsyncDelegateCommand(async () => await TreeViewModel.CommandHandler.RunAsync(false));
-            GoToCodeCommand = new AsyncDelegateCommand(async () => await TreeViewModel.CommandHandler.GoToCodeAsync());
+            DryRunSelectedCommand = new AsyncDelegateCommand(async () => await TreeViewModel.CommandHandler.RunAsync(true));
+            GoToCodeCommand = new AsyncDelegateCommand(async () => await TreeViewModel.CommandHandler.GoToCodeAsync(Benchmark.Project, TargetSymbol), () => SupportsGoToCode);
         }
 
         public void IncrementChildNodeCount()
@@ -123,6 +130,10 @@ namespace BenchmarkRunner.Model
         }
 
         public string FullName => _benchmark.Namespace + "." + _benchmark.ClassName;
+
+        public override bool SupportsGoToCode => true;
+        public override Benchmark Benchmark => _benchmark;
+        public override ISymbol TargetSymbol => _benchmark.ClassSymbol;
     }
 
     public class MethodBenchmarkTreeNode : BenchmarkTreeNode
@@ -137,5 +148,9 @@ namespace BenchmarkRunner.Model
         }
 
         public string FullName => _benchmark.Namespace + "." + _benchmark.ClassName + "." + _benchmark.MethodName;
+
+        public override bool SupportsGoToCode => true;
+        public override Benchmark Benchmark => _benchmark;
+        public override ISymbol TargetSymbol => _benchmark.MethodSymbol;
     }
 }

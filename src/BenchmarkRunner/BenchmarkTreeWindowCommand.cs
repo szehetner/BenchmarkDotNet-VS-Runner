@@ -21,7 +21,7 @@ namespace BenchmarkRunner
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class BenchmarkTreeWindowCommand
+    public sealed class BenchmarkTreeWindowCommand
     {
         public const int CommandId = 0x0100;
 
@@ -46,6 +46,7 @@ namespace BenchmarkRunner
         /// VS Package that provides this command, not null.
         /// </summary>
         private readonly AsyncPackage _package;
+        public AsyncPackage ParentPackage => _package;
 
         private IServiceProvider _serviceProvider;
 
@@ -83,8 +84,6 @@ namespace BenchmarkRunner
 
             commandService.AddCommand(new OleMenuCommand(GroupByHandler, new CommandID(CommandSet, cmdIdGroupBy)));
             commandService.AddCommand(new OleMenuCommand(GroupByListHandler, new CommandID(CommandSet, cmdIdGroupByList)));
-
-            _commandHandler = new CommandHandler(package, _serviceProvider);
         }
 
         private string selectedGrouping = GroupName.PROJECT_CLASS;
@@ -171,7 +170,7 @@ namespace BenchmarkRunner
         /// <summary>
         /// Gets the service provider from the owner package.
         /// </summary>
-        private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
+        public Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
         {
             get
             {
@@ -194,6 +193,8 @@ namespace BenchmarkRunner
 
             var container = await package.GetServiceAsync(typeof(Microsoft.VisualStudio.ComponentModelHost.SComponentModel)) as Microsoft.VisualStudio.ComponentModelHost.IComponentModel;
             container.DefaultCompositionService.SatisfyImportsOnce(Instance);
+
+            Instance._commandHandler = new CommandHandler(Instance);
         }
 
         /// <summary>

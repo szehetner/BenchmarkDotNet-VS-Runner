@@ -101,6 +101,9 @@
     <Resource Include="Resources\Namespace.png" />
     <Resource Include="Resources\Project.png" />
     <Resource Include="Resources\Category.png" />
+    <Resource Include="Resources\GoToDeclaration.png" />
+    <Resource Include="Resources\Run.png" />
+    <Resource Include="Resources\RunChecked.png" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>

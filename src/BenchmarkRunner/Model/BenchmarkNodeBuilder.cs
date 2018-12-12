@@ -48,14 +48,14 @@ namespace BenchmarkRunner.Model
 
         private void BuildProjectClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
         {
-            var projectNode = GetOrInsertNode(nodeList, benchmark.Project, () => CreateProjectNode(benchmark));
+            var projectNode = GetOrInsertNode(nodeList, benchmark.ProjectName, () => CreateProjectNode(benchmark));
             var classNode = GetOrInsertNode(projectNode, benchmark.ClassName, p => CreateClassNode(p, benchmark));
             GetOrInsertNode(classNode, benchmark.MethodName, p => CreateMethodNode(p, benchmark));
         }
 
         private void BuildNamespaceClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
         {
-            var projectNode = GetOrInsertNode(nodeList, benchmark.Project, () => CreateProjectNode(benchmark));
+            var projectNode = GetOrInsertNode(nodeList, benchmark.ProjectName, () => CreateProjectNode(benchmark));
 
             BenchmarkTreeNode lastNamespaceNode = projectNode;
             string[] namespaceParts = benchmark.Namespace.Split('.');
@@ -70,7 +70,7 @@ namespace BenchmarkRunner.Model
 
         private void BuildCategoryClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
         {
-            var projectNode = GetOrInsertNode(nodeList, benchmark.Project, () => CreateProjectNode(benchmark));
+            var projectNode = GetOrInsertNode(nodeList, benchmark.ProjectName, () => CreateProjectNode(benchmark));
             foreach (string category in benchmark.Categories)
             {
                 var categoryNode = GetOrInsertNode(projectNode, category, p => CreateCategoryNode(p, category));
@@ -131,7 +131,7 @@ namespace BenchmarkRunner.Model
 
         private BenchmarkTreeNode CreateProjectNode(Benchmark benchmark)
         {
-            return new ProjectBenchmarkTreeNode(benchmark.Project);
+            return new ProjectBenchmarkTreeNode(benchmark.ProjectName);
         }
 
         private BenchmarkTreeNode CreateNamespaceNode(BenchmarkTreeNode parent, string namespacePart)
