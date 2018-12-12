@@ -6,10 +6,12 @@ namespace BenchmarkRunner.Model
 {
     public class BenchmarkNodeBuilder
     {
+        private readonly BenchmarkTreeViewModel _treeViewModel;
         private readonly Grouping _grouping;
 
-        public BenchmarkNodeBuilder(Grouping grouping)
+        public BenchmarkNodeBuilder(BenchmarkTreeViewModel treeViewModel, Grouping grouping)
         {
+            _treeViewModel = treeViewModel;
             _grouping = grouping;
         }
 
@@ -97,6 +99,7 @@ namespace BenchmarkRunner.Model
             }
 
             var newNode = createFunc(parent);
+            newNode.TreeViewModel = _treeViewModel;
             parent.Nodes.Insert(previousIndex, newNode);
             return newNode;
         }
@@ -121,6 +124,7 @@ namespace BenchmarkRunner.Model
             }
 
             var newNode = createFunc();
+            newNode.TreeViewModel = _treeViewModel;
             collection.Insert(previousIndex, newNode);
             return newNode;
         }

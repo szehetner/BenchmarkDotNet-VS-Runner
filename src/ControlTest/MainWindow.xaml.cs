@@ -34,7 +34,7 @@ namespace ControlTest
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            BenchmarkTreeViewModel viewModel = new BenchmarkTreeViewModel();
+            BenchmarkTreeViewModel viewModel = new BenchmarkTreeViewModel(null);
             viewModel.Nodes = new ObservableCollection<BenchmarkTreeNode>
             {
                 new ProjectBenchmarkTreeNode("BenchmarkProject1")

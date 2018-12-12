@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using BenchmarkRunner.Controls.Helper;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -7,10 +8,15 @@ namespace BenchmarkRunner.Model
     public class BenchmarkTreeNode : INotifyPropertyChanged
     {
         public string NodeName { get; set; }
-        public string NodeCount => "(" + Nodes.Count + ")";
+        public int TotalNodeCount { get; set; }
+        public string NodeCountText => "(" + TotalNodeCount + ")";
         public ObservableCollection<BenchmarkTreeNode> Nodes { get; set; }
 
+        public BenchmarkTreeViewModel TreeViewModel { get; set; }
         public BenchmarkTreeNode Parent { get; set; }
+
+        public AsyncDelegateCommand RunSelectedCommand { get; }
+        public AsyncDelegateCommand GoToCodeCommand { get; }
 
         private bool _isExpanded = true;
         public bool IsExpanded
@@ -19,6 +25,17 @@ namespace BenchmarkRunner.Model
             set
             {
                 _isExpanded = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isSelected = true;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
                 OnPropertyChanged();
             }
         }
@@ -40,6 +57,15 @@ namespace BenchmarkRunner.Model
             Parent = parent;
             NodeName = nodeName;
             Nodes = new ObservableCollection<BenchmarkTreeNode>();
+
+            RunSelectedCommand = new AsyncDelegateCommand(async () => await TreeViewModel.CommandHandler.RunAsync(false));
+            GoToCodeCommand = new AsyncDelegateCommand(async () => await TreeViewModel.CommandHandler.GoToCodeAsync());
+        }
+
+        public void IncrementChildNodeCount()
+        {
+            TotalNodeCount++;
+            Parent?.IncrementChildNodeCount();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -106,6 +132,8 @@ namespace BenchmarkRunner.Model
         public MethodBenchmarkTreeNode(BenchmarkTreeNode parent, Benchmark benchmark, string methodName) : base(parent, methodName)
         {
             _benchmark = benchmark;
+
+            Parent?.IncrementChildNodeCount();
         }
 
         public string FullName => _benchmark.Namespace + "." + _benchmark.ClassName + "." + _benchmark.MethodName;

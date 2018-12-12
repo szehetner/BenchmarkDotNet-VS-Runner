@@ -38,13 +38,14 @@ namespace BenchmarkRunner
             this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
 
+        public override void OnToolWindowCreated()
+        {
+            var viewModel = TreeWindowControl.InitializeViewModel(BenchmarkTreeWindowCommand.Instance.CommandHandler);
+            BenchmarkTreeWindowCommand.Instance.SetViewModel(viewModel);
+        }
+
         private BenchmarkTreeWindowControl TreeWindowControl => (BenchmarkTreeWindowControl)Content;
         
         public BenchmarkTreeNode SelectedItem => TreeWindowControl.SelectedItem;
-
-        internal BenchmarkTreeViewModel GetViewModel()
-        {
-            return TreeWindowControl.GetViewModel();
-        }
     }
 }

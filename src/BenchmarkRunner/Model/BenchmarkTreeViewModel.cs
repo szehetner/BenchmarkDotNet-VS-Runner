@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BenchmarkRunner.Controls.Helper;
+using Microsoft.VisualStudio.PlatformUI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,8 +10,14 @@ namespace BenchmarkRunner.Model
     public class BenchmarkTreeViewModel
     {
         public ObservableCollection<BenchmarkTreeNode> Nodes { get; set; } = new ObservableCollection<BenchmarkTreeNode>();
+        public CommandHandler CommandHandler { get; set; }
 
         private List<Benchmark> _discoveredBenchmarks = new List<Benchmark>();
+
+        public BenchmarkTreeViewModel(CommandHandler commandHandler)
+        {
+            CommandHandler = commandHandler;
+        }
 
         public void Refresh(WorkspaceBenchmarkDiscoverer discoverer, Grouping grouping)
         {
@@ -20,7 +28,7 @@ namespace BenchmarkRunner.Model
                         return b;
                     });
 
-            BenchmarkNodeBuilder nodeBuilder = new BenchmarkNodeBuilder(grouping);
+            BenchmarkNodeBuilder nodeBuilder = new BenchmarkNodeBuilder(this, grouping);
             nodeBuilder.RebuildNodes(Nodes, benchmarks);
         }
 
@@ -29,7 +37,7 @@ namespace BenchmarkRunner.Model
             if (_discoveredBenchmarks.Count == 0)
                 return;
 
-            BenchmarkNodeBuilder nodeBuilder = new BenchmarkNodeBuilder(grouping);
+            BenchmarkNodeBuilder nodeBuilder = new BenchmarkNodeBuilder(this, grouping);
             nodeBuilder.RebuildNodes(Nodes, _discoveredBenchmarks);
         }
 

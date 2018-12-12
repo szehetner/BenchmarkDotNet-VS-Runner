@@ -59,9 +59,12 @@
       <DependentUpon>BenchmarkTreeWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="BenchmarkTreeWindowPackage.cs" />
+    <Compile Include="CommandHandler.cs" />
     <Compile Include="Controls\BenchmarkTree.xaml.cs">
       <DependentUpon>BenchmarkTree.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Helper\AsyncDelegateCommand.cs" />
+    <Compile Include="Controls\Helper\DelegateCommand.cs" />
     <Compile Include="Model\Benchmark.cs" />
     <Compile Include="Model\BenchmarkNodeBuilder.cs" />
     <Compile Include="Model\BenchmarkTreeNode.cs" />
@@ -78,6 +81,7 @@
     <Compile Include="Runner\BenchmarkRunController.cs" />
     <Compile Include="Runner\RunParameters.cs" />
     <Compile Include="Runner\TargetRuntime.cs" />
+    <Compile Include="UIHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

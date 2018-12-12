@@ -15,8 +15,6 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using BenchmarkRunner.Model;
 using System.Runtime.InteropServices;
-using BenchmarkRunner.ProjectSystem;
-using BenchmarkRunner.Runner;
 
 namespace BenchmarkRunner
 {
@@ -47,9 +45,14 @@ namespace BenchmarkRunner
         /// <summary>
         /// VS Package that provides this command, not null.
         /// </summary>
-        private readonly AsyncPackage package;
+        private readonly AsyncPackage _package;
 
         private IServiceProvider _serviceProvider;
+
+        private CommandHandler _commandHandler;
+        public CommandHandler CommandHandler => _commandHandler;
+
+        private BenchmarkTreeViewModel _treeViewModel;
 
         [Import]
         internal VisualStudioWorkspace Workspace;
@@ -65,7 +68,7 @@ namespace BenchmarkRunner
             var dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
             _serviceProvider = new ServiceProvider(dte2 as Microsoft.VisualStudio.OLE.Interop.IServiceProvider);
 
-            this.package = package ?? throw new ArgumentNullException(nameof(package));
+            this._package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             commandService.AddCommand(new MenuCommand(ShowToolWindow, new CommandID(CommandSet, CommandId)));
@@ -80,6 +83,8 @@ namespace BenchmarkRunner
 
             commandService.AddCommand(new OleMenuCommand(GroupByHandler, new CommandID(CommandSet, cmdIdGroupBy)));
             commandService.AddCommand(new OleMenuCommand(GroupByListHandler, new CommandID(CommandSet, cmdIdGroupByList)));
+
+            _commandHandler = new CommandHandler(package, _serviceProvider);
         }
 
         private string selectedGrouping = GroupName.PROJECT_CLASS;
@@ -108,8 +113,7 @@ namespace BenchmarkRunner
             {
                 selectedGrouping = newChoice;
 
-                var viewModel = GetTreeViewModel();
-                viewModel.SetGrouping(GroupName.GetValue(selectedGrouping));
+                _treeViewModel.SetGrouping(GroupName.GetValue(selectedGrouping));
             }
         }
 
@@ -127,101 +131,32 @@ namespace BenchmarkRunner
             var discoverer = new WorkspaceBenchmarkDiscoverer(Workspace);
             await discoverer.InitializeAsync();
 
-            var viewModel = GetTreeViewModel();
-            viewModel.Refresh(discoverer, GroupName.GetValue(selectedGrouping));
+            _treeViewModel.Refresh(discoverer, GroupName.GetValue(selectedGrouping));
         }
 
         private void ExpandAll(object sender, EventArgs arguments)
         {
-            var viewModel = GetTreeViewModel();
-            viewModel.ExpandAll();
+            _treeViewModel.ExpandAll();
         }
 
         private void CollapseAll(object sender, EventArgs arguments)
         {
-            var viewModel = GetTreeViewModel();
-            viewModel.CollapseAll();
+            _treeViewModel.CollapseAll();
         }
-
-        private BenchmarkTreeViewModel GetTreeViewModel()
-        {
-            var toolWindow = (BenchmarkTreeWindow)this.package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, false);
-            return toolWindow.GetViewModel();
-        }
-
-        private EnvDTE.Project GetProject(DTE2 dte2, string name)
-        {
-            foreach (EnvDTE.Project project in dte2.Solution.Projects)
-            {
-                if (project.Name == name)
-                    return project;
-            }
-            throw new Exception("Unexpected Project: " + name);
-        }
-
+                
         private async void RunNormal(object sender, EventArgs arguments)
         {
-            await RunAsync(false);
+            await _commandHandler.RunAsync(false);
         }
 
         private async void RunDry(object sender, EventArgs arguments)
         {
-            await RunAsync(true);
+            await _commandHandler.RunAsync(true);
         }
 
-        private async Task RunAsync(bool isDryRun)
+        public void SetViewModel(BenchmarkTreeViewModel viewModel)
         {
-            try
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
-
-                var toolWindow = (BenchmarkTreeWindow)this.package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, false);
-
-                BenchmarkTreeNode selectedNode = toolWindow.SelectedItem;
-
-                var dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
-                EnvDTE.Project project = GetProject(dte2, selectedNode.ProjectName);
-                if (project == null)
-                    return;
-
-                var propertyProvider = ProjectPropertyProviderFactory.Create(project);
-                await propertyProvider.LoadPropertiesAsync();
-
-                try
-                {
-                    if (!propertyProvider.IsOptimized)
-                    {
-                        await ShowError(
-                            "The current build configuration does not have the \"Optimize code\" flag set and is therefore not suitable for running Benchmarks.\r\n\r\nPlease enable the the \"Optimize code\" flag (under Project Properties -> Build) or switch to a non-debug configuration (e.g. 'Release') before running a Benchmark.");
-                        return;
-                    }
-                }
-                catch (Exception)
-                {
-                }
-
-                string configurationName = project.ConfigurationManager.ActiveConfiguration.ConfigurationName;
-                dte2.Solution.SolutionBuild.BuildProject(configurationName, project.UniqueName, true);
-                if (dte2.Solution.SolutionBuild.LastBuildInfo != 0)
-                {
-                    return;
-                }
-
-                var runParameters = new RunParameters
-                {
-                    OutputPath = propertyProvider.OutputPath,
-                    Runtime = propertyProvider.TargetRuntime,
-                    AssemblyPath = propertyProvider.GetOutputFilename(),
-                    IsDryRun = isDryRun,
-                    SelectedNode = selectedNode
-                };
-                BenchmarkRunController runController = new BenchmarkRunController(runParameters);
-                await runController.RunAsync();
-            }
-            catch (Exception ex)
-            {
-                await ShowError(ex.Message);
-            }
+            _treeViewModel = viewModel;
         }
 
         /// <summary>
@@ -240,7 +175,7 @@ namespace BenchmarkRunner
         {
             get
             {
-                return this.package;
+                return this._package;
             }
         }
 
@@ -273,29 +208,14 @@ namespace BenchmarkRunner
             // Get the instance number 0 of this tool window. This window is single instance so this instance
             // is actually the only one.
             // The last flag is set to true so that if the tool window does not exists it will be created.
-            ToolWindowPane window = this.package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, true);
+            BenchmarkTreeWindow window = (BenchmarkTreeWindow)this._package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, true);
             if ((null == window) || (null == window.Frame))
             {
                 throw new NotSupportedException("Cannot create tool window");
             }
-
+            
             IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
-        }
-
-        private async Task ShowError(string message)
-        {
-            string title = "Benchmark Runner";
-
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-            VsShellUtilities.ShowMessageBox(
-                _serviceProvider,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_CRITICAL,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
     }
 }

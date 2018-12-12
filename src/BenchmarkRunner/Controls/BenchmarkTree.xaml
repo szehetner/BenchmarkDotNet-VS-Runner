@@ -10,45 +10,156 @@
     <DockPanel>
         <TreeView Name="trvBenchmarks" ItemsSource="{Binding Nodes}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <TreeView.Resources>
+                <ContextMenu x:Key="NodeContextMenu">
+                    <MenuItem Name="RunSelected" Header="Run Selected" Command="{Binding RunSelectedCommand}" />
+                    <Separator/>
+                    <MenuItem Name="GotoCode" Header="Go To Code" Command="{Binding GoToCodeCommand}" />
+                </ContextMenu>
                 <HierarchicalDataTemplate DataType="{x:Type model:ProjectBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal" Margin="0,1">
                         <Image Source="/BenchmarkRunner;component/Resources/Project.png" />
-                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
-                        <TextBlock Text="{Binding NodeCount}" Margin="3,0,0,0" Foreground="#FF595959" />
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                            <TextBlock.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </MultiDataTrigger>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Resources>
+                        </TextBlock>
+                        <TextBlock Text="{Binding NodeCountText}" Margin="3,0,0,0" Foreground="#FF595959" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type model:NamespaceBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal" Margin="0,1">
                         <Image Source="/BenchmarkRunner;component/Resources/Namespace.png" />
-                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
-                        <TextBlock Text="{Binding NodeCount}" Margin="3,0,0,0" Foreground="#FF595959" />
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                            <TextBlock.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </MultiDataTrigger>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Resources>
+                        </TextBlock>
+                        <TextBlock Text="{Binding NodeCountText}" Margin="3,0,0,0" Foreground="#FF595959" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type model:CategoryBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal" Margin="0,1">
                         <Image Source="/BenchmarkRunner;component/Resources/Category.png" />
-                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
-                        <TextBlock Text="{Binding NodeCount}" Margin="3,0,0,0" Foreground="#FF595959" />
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                            <TextBlock.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </MultiDataTrigger>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Resources>
+                        </TextBlock>
+                        <TextBlock Text="{Binding NodeCountText}" Margin="3,0,0,0" Foreground="#FF595959" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type model:ClassBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal" Margin="0,1">
                         <Image Source="/BenchmarkRunner;component/Resources/Class.png" />
-                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
-                        <TextBlock Text="{Binding NodeCount}" Margin="3,0,0,0" Foreground="#FF595959" />
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                            <TextBlock.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </MultiDataTrigger>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Resources>
+                        </TextBlock>
+                        <TextBlock Text="{Binding NodeCountText}" Margin="3,0,0,0" Foreground="#FF595959" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type model:MethodBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal" Margin="0,1">
                         <Image Source="/BenchmarkRunner;component/Resources/Method.png" />
-                        <TextBlock x:Name="txtNodeName" Text="{Binding NodeName}" Margin="3,0,0,0" />
+                        <TextBlock x:Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                            <TextBlock.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                        </MultiDataTrigger>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource _CustomControlBrushKey}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Resources>
+                        </TextBlock>
                     </StackPanel>
                 </HierarchicalDataTemplate>
+                <SolidColorBrush x:Key="_CustomHighlightBrushKey" Color="{Binding Source={StaticResource {x:Static SystemColors.HighlightBrushKey}}, Path=Color}" />
+                <SolidColorBrush x:Key="_CustomControlBrushKey" Color="{Binding Source={StaticResource {x:Static SystemColors.ControlBrushKey}}, Path=Color}" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                
             </TreeView.Resources>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
-                    <!--<Setter Property="IsSelected" Value="{Binding IsSelected}" />-->
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="ContextMenu" Value="{StaticResource NodeContextMenu}"/>
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
