@@ -27,6 +27,8 @@ namespace ControlTest
             InitializeComponent();
         }
 
+        private BenchmarkTreeViewModel _viewModel;
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var item = treeView.SelectedItem;
@@ -34,38 +36,39 @@ namespace ControlTest
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            BenchmarkTreeViewModel viewModel = new BenchmarkTreeViewModel(null);
-            viewModel.Nodes = new ObservableCollection<BenchmarkTreeNode>
-            {
-                new ProjectBenchmarkTreeNode("BenchmarkProject1")
-                {
-                    Nodes = new ObservableCollection<BenchmarkTreeNode>()
-                    {
-                        new NamespaceBenchmarkTreeNode(null, "Namespace1.Namespace2")
-                        {
-                            Nodes = new ObservableCollection<BenchmarkTreeNode>
-                            {
-                                new ClassBenchmarkTreeNode(null, null, "BenchmarkClass1")
-                                {
-                                    Nodes = new ObservableCollection<BenchmarkTreeNode>
-                                    {
-                                        new MethodBenchmarkTreeNode(null, null, "Method1"),
-                                        new MethodBenchmarkTreeNode(null, null, "Method2"),
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                new ProjectBenchmarkTreeNode("BenchmarkProject2")
-            };
+            _viewModel = new BenchmarkTreeViewModel(null);
+            //viewModel.Nodes = new ObservableCollection<BenchmarkTreeNode>
+            //{
+            //    new ProjectBenchmarkTreeNode("BenchmarkProject1")
+            //    {
+            //        Nodes = new ObservableCollection<BenchmarkTreeNode>()
+            //        {
+            //            new NamespaceBenchmarkTreeNode(null, "Namespace1.Namespace2")
+            //            {
+            //                Nodes = new ObservableCollection<BenchmarkTreeNode>
+            //                {
+            //                    new ClassBenchmarkTreeNode(null, null, "BenchmarkClass1")
+            //                    {
+            //                        Nodes = new ObservableCollection<BenchmarkTreeNode>
+            //                        {
+            //                            new MethodBenchmarkTreeNode(null, null, "Method1"),
+            //                            new MethodBenchmarkTreeNode(null, null, "Method2"),
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    },
+            //    new ProjectBenchmarkTreeNode("BenchmarkProject2")
+            //};
 
-            treeView.DataContext = viewModel;
+            treeView.DataContext = _viewModel;
         }
 
-        private void Reset_Click(object sender, RoutedEventArgs e)
+        private async void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            
+            var discoverer = new StubDiscoverer();
+            await _viewModel.RefreshAsync(discoverer, Grouping.ProjectNamespaceClass);
         }
 
         private void Change_Click(object sender, RoutedEventArgs e)

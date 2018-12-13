@@ -10,7 +10,7 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <Button Click="Reset_Click">Reset</Button>
+                <Button Click="Refresh_Click">Refresh</Button>
                 <Button Click="ExpandAll_Click">Expand All</Button>
                 <Button Click="CollapseAll_Click">Collapse All</Button>
                 <Button Click="Change_Click">Change Sorting</Button>

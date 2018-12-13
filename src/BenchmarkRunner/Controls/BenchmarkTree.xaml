@@ -28,6 +28,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
+                <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
                 <HierarchicalDataTemplate DataType="{x:Type model:ProjectBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal" Margin="0,1">
                         <Image Source="/BenchmarkRunner;component/Resources/Project.png" />
@@ -50,6 +51,7 @@
                             </TextBlock.Resources>
                         </TextBlock>
                         <TextBlock Text="{Binding NodeCountText}" Margin="3,0,0,0" Foreground="#FF595959" />
+                        <TextBlock Text="loading..." Margin="3,0,0,0" Foreground="#FF595959" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}, FallbackValue=Hidden}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type model:NamespaceBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">

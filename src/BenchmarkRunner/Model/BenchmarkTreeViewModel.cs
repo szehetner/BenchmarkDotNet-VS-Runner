@@ -3,23 +3,36 @@ using Microsoft.VisualStudio.PlatformUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace BenchmarkRunner.Model
 {
-    public class BenchmarkTreeViewModel
+    public class BenchmarkTreeViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<BenchmarkTreeNode> Nodes { get; set; } = new ObservableCollection<BenchmarkTreeNode>();
+        private ObservableCollection<BenchmarkTreeNode> _nodes = new ObservableCollection<BenchmarkTreeNode>();
+
+        public ObservableCollection<BenchmarkTreeNode> Nodes
+        {
+            get { return _nodes; }
+            set
+            {
+                _nodes = value;
+                OnPropertyChanged();
+            }
+        }
         public CommandHandler CommandHandler { get; set; }
 
         private List<Benchmark> _discoveredBenchmarks = new List<Benchmark>();
-
+        
         public BenchmarkTreeViewModel(CommandHandler commandHandler)
         {
             CommandHandler = commandHandler;
         }
 
-        public void Refresh(WorkspaceBenchmarkDiscoverer discoverer, Grouping grouping)
+        public async Task RefreshAsync(IBenchmarkDiscoverer discoverer, Grouping grouping)
         {
             _discoveredBenchmarks.Clear();
             var benchmarks = discoverer.FindBenchmarks().Select(b =>
@@ -29,16 +42,16 @@ namespace BenchmarkRunner.Model
                     });
 
             BenchmarkNodeBuilder nodeBuilder = new BenchmarkNodeBuilder(this, grouping);
-            nodeBuilder.RebuildNodes(Nodes, benchmarks);
+            await nodeBuilder.RebuildNodesAsync(benchmarks);
         }
 
-        public void SetGrouping(Grouping grouping)
+        public async Task SetGroupingAsync(Grouping grouping)
         {
             if (_discoveredBenchmarks.Count == 0)
                 return;
 
             BenchmarkNodeBuilder nodeBuilder = new BenchmarkNodeBuilder(this, grouping);
-            nodeBuilder.RebuildNodes(Nodes, _discoveredBenchmarks);
+            await nodeBuilder.RebuildNodesAsync(_discoveredBenchmarks);
         }
 
         public void ExpandAll()
@@ -59,6 +72,13 @@ namespace BenchmarkRunner.Model
 
                 SetExpansion(node.Nodes, isExpanded);
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

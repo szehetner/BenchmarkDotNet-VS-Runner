@@ -88,7 +88,7 @@ namespace BenchmarkRunner
 
         private string selectedGrouping = GroupName.PROJECT_CLASS;
 
-        private void GroupByHandler(object sender, EventArgs eventArgs)
+        private async void GroupByHandler(object sender, EventArgs eventArgs)
         {
             if (eventArgs == EventArgs.Empty)
                 return;
@@ -112,7 +112,14 @@ namespace BenchmarkRunner
             {
                 selectedGrouping = newChoice;
 
-                _treeViewModel.SetGrouping(GroupName.GetValue(selectedGrouping));
+                try
+                {
+                    await _treeViewModel.SetGroupingAsync(GroupName.GetValue(selectedGrouping));
+                }
+                catch (Exception ex)
+                {
+                    await UIHelper.ShowErrorAsync(_package, ex.Message);
+                }
             }
         }
 
@@ -127,10 +134,17 @@ namespace BenchmarkRunner
 
         private async void Refresh(object sender, EventArgs arguments)
         {
-            var discoverer = new WorkspaceBenchmarkDiscoverer(Workspace);
-            await discoverer.InitializeAsync();
+            try
+            {
+                var discoverer = new WorkspaceBenchmarkDiscoverer(Workspace);
+                await discoverer.InitializeAsync();
 
-            _treeViewModel.Refresh(discoverer, GroupName.GetValue(selectedGrouping));
+                await _treeViewModel.RefreshAsync(discoverer, GroupName.GetValue(selectedGrouping));
+            }
+            catch (Exception ex)
+            {
+                await UIHelper.ShowErrorAsync(_package, ex.Message);
+            }
         }
 
         private void ExpandAll(object sender, EventArgs arguments)

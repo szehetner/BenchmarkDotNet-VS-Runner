@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace BenchmarkRunner.Model
 {
@@ -15,30 +18,53 @@ namespace BenchmarkRunner.Model
             _grouping = grouping;
         }
 
-        public void RebuildNodes(ObservableCollection<BenchmarkTreeNode> rootList, IEnumerable<Benchmark> benchmarks)
+        public async Task RebuildNodesAsync(IEnumerable<Benchmark> benchmarks)
         {
-            rootList.Clear();
+            BufferBlock<Benchmark> buffer = new BufferBlock<Benchmark>();
 
-            foreach (Benchmark benchmark in benchmarks)
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Task.Run(() => RunDiscovery(benchmarks, buffer));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            _treeViewModel.Nodes = new ObservableCollection<BenchmarkTreeNode>();
+            
+            ProjectBenchmarkTreeNode lastProjectNode = null;
+            while (await buffer.OutputAvailableAsync())
             {
-                BuildHierarchy(rootList, benchmark);
+                Benchmark currentBenchmark = await buffer.ReceiveAsync();
+                var projectNode = (ProjectBenchmarkTreeNode)GetOrInsertNode(_treeViewModel.Nodes, currentBenchmark.ProjectName, () => CreateProjectNode(currentBenchmark));
+                if (lastProjectNode != null && projectNode != lastProjectNode)
+                    lastProjectNode.IsLoading = false;
+
+                BuildHierarchy(_treeViewModel.Nodes, projectNode, currentBenchmark);
+                lastProjectNode = projectNode;
             }
+            lastProjectNode.IsLoading = false;
         }
 
-        private void BuildHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
+        private void RunDiscovery(IEnumerable<Benchmark> benchmarks, BufferBlock<Benchmark> buffer)
+        {
+            foreach (var benchmark in benchmarks)
+            {
+                buffer.Post(benchmark);
+            }
+            buffer.Complete();
+        }
+
+        private void BuildHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, ProjectBenchmarkTreeNode projectNode, Benchmark benchmark)
         {
             switch (_grouping)
             {
                 case Grouping.ProjectClass:
-                    BuildProjectClassHierarchy(nodeList, benchmark);
+                    BuildProjectClassHierarchy(nodeList, projectNode, benchmark);
                     break;
 
                 case Grouping.ProjectNamespaceClass:
-                    BuildNamespaceClassHierarchy(nodeList, benchmark);
+                    BuildNamespaceClassHierarchy(nodeList, projectNode, benchmark);
                     break;
 
                 case Grouping.ProjectCategoryClass:
-                    BuildCategoryClassHierarchy(nodeList, benchmark);
+                    BuildCategoryClassHierarchy(nodeList, projectNode, benchmark);
                     break;
 
                 default:
@@ -46,17 +72,14 @@ namespace BenchmarkRunner.Model
             }
         }
 
-        private void BuildProjectClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
+        private void BuildProjectClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, ProjectBenchmarkTreeNode projectNode, Benchmark benchmark)
         {
-            var projectNode = GetOrInsertNode(nodeList, benchmark.ProjectName, () => CreateProjectNode(benchmark));
             var classNode = GetOrInsertNode(projectNode, benchmark.ClassName, p => CreateClassNode(p, benchmark));
             GetOrInsertNode(classNode, benchmark.MethodName, p => CreateMethodNode(p, benchmark));
         }
 
-        private void BuildNamespaceClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
+        private void BuildNamespaceClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, ProjectBenchmarkTreeNode projectNode, Benchmark benchmark)
         {
-            var projectNode = GetOrInsertNode(nodeList, benchmark.ProjectName, () => CreateProjectNode(benchmark));
-
             BenchmarkTreeNode lastNamespaceNode = projectNode;
             string[] namespaceParts = benchmark.Namespace.Split('.');
             foreach (var namespacePart in namespaceParts)
@@ -68,9 +91,8 @@ namespace BenchmarkRunner.Model
             GetOrInsertNode(classNode, benchmark.MethodName, p => CreateMethodNode(p, benchmark));
         }
 
-        private void BuildCategoryClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, Benchmark benchmark)
+        private void BuildCategoryClassHierarchy(ObservableCollection<BenchmarkTreeNode> nodeList, ProjectBenchmarkTreeNode projectNode, Benchmark benchmark)
         {
-            var projectNode = GetOrInsertNode(nodeList, benchmark.ProjectName, () => CreateProjectNode(benchmark));
             foreach (string category in benchmark.Categories)
             {
                 var categoryNode = GetOrInsertNode(projectNode, category, p => CreateCategoryNode(p, category));
@@ -84,7 +106,7 @@ namespace BenchmarkRunner.Model
             int previousIndex = 0;
             foreach (var currentNode in parent.Nodes)
             {
-                int comparisonResult = string.Compare(currentNode.NodeName, nodeName);
+                int comparisonResult = string.Compare(nodeName, currentNode.NodeName);
 
                 if (comparisonResult == 0)
                 {
@@ -109,7 +131,7 @@ namespace BenchmarkRunner.Model
             int previousIndex = 0;
             foreach (var currentNode in collection)
             {
-                int comparisonResult = string.Compare(currentNode.NodeName, nodeName);
+                int comparisonResult = string.Compare(nodeName, currentNode.NodeName);
 
                 if (comparisonResult == 0)
                 {

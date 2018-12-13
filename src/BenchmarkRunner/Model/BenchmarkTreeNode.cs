@@ -9,9 +9,34 @@ namespace BenchmarkRunner.Model
     public class BenchmarkTreeNode : INotifyPropertyChanged
     {
         public string NodeName { get; set; }
-        public int TotalNodeCount { get; set; }
+        public int TotalNodeCount
+        {
+            get
+            {
+                return _totalNodeCount;
+            }
+            set
+            {
+                _totalNodeCount = value;
+                OnPropertyChanged(nameof(NodeCountText));
+            }
+        }
         public string NodeCountText => "(" + TotalNodeCount + ")";
-        public ObservableCollection<BenchmarkTreeNode> Nodes { get; set; }
+
+        private bool _isExpanded = false;
+        private bool _isSelected = false;
+        private int _totalNodeCount;
+        private ObservableCollection<BenchmarkTreeNode> _nodes;
+
+        public ObservableCollection<BenchmarkTreeNode> Nodes
+        {
+            get { return _nodes; }
+            set
+            {
+                _nodes = value;
+                OnPropertyChanged();
+            }
+        }
 
         public BenchmarkTreeViewModel TreeViewModel { get; set; }
         public BenchmarkTreeNode Parent { get; set; }
@@ -20,7 +45,6 @@ namespace BenchmarkRunner.Model
         public AsyncDelegateCommand DryRunSelectedCommand { get; }
         public AsyncDelegateCommand GoToCodeCommand { get; }
 
-        private bool _isExpanded = true;
         public bool IsExpanded
         {
             get { return _isExpanded; }
@@ -31,7 +55,7 @@ namespace BenchmarkRunner.Model
             }
         }
 
-        private bool _isSelected = true;
+
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -85,8 +109,20 @@ namespace BenchmarkRunner.Model
 
     public class ProjectBenchmarkTreeNode : BenchmarkTreeNode
     {
+        private bool _isLoading = true;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ProjectBenchmarkTreeNode(string projectName) : base(null, projectName)
         {
+            IsLoading = true;
         }
     }
 
