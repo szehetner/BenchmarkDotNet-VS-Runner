@@ -97,7 +97,6 @@
     <VSCTCompile Include="BenchmarkTreeWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
-    <Content Include="index.html" />
     <Content Include="Resources\BenchmarkTreeWindowCommand.png" />
     <Content Include="Resources\BenchmarkTreeWindowPackage.ico" />
     <Resource Include="Resources\Class.png" />
@@ -108,7 +107,6 @@
     <Resource Include="Resources\GoToDeclaration.png" />
     <Resource Include="Resources\Run.png" />
     <Resource Include="Resources\RunChecked.png" />
-    <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost">
