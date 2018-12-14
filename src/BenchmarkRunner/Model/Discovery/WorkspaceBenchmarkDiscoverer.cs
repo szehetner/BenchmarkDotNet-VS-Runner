@@ -62,13 +62,14 @@ namespace BenchmarkRunner.Model
                 Namespace = methodSymbol.ContainingNamespace.ToString(),
                 ClassName = methodSymbol.ContainingType.Name,
                 MethodName = methodSymbol.Name,
-                Categories = GetCategories(methodSymbol),
+                Categories = GetCategories(methodSymbol) ?? _emptyCategoryList,
                 MethodSymbol = methodSymbol,
                 ClassSymbol = methodSymbol.ContainingType,
                 Project = project
             };
         }
 
+        private static List<string> _emptyCategoryList = new List<string> { "<empty> " };
         private List<string> GetCategories(IMethodSymbol methodSymbol)
         {
             List<string> categories = null;
@@ -96,6 +97,7 @@ namespace BenchmarkRunner.Model
                     }
                 }
             }
+
             return categories;
         }
 

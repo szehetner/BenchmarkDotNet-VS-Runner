@@ -74,6 +74,38 @@ namespace BenchmarkRunner.Model
             }
         }
 
+        private bool _isLoading = false;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set
+            {
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsFinished));
+                }
+            }
+        }
+
+        private bool _isEmpty = false;
+        public bool IsEmpty
+        {
+            get { return _isEmpty; }
+            set
+            {
+                if (_isEmpty != value)
+                {
+                    _isEmpty = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsFinished));
+                }
+            }
+        }
+        
+        public bool IsFinished => !_isLoading && !_isEmpty;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")

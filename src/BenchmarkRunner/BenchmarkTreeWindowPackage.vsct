@@ -92,6 +92,8 @@
       <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdExpandAll" priority="0x0102" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarGroupByGroupID"/>
         <Icon guid="guidImages" id="bmpPicExpandAll" />
+        <CommandFlag>DontCache</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <CommandName>cmdIdExpandAll</CommandName>
           <ButtonText>Expand All</ButtonText>
@@ -101,6 +103,8 @@
       <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdCollapseAll" priority="0x0103" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarGroupByGroupID"/>
         <Icon guid="guidImages" id="bmpPicCollapseAll" />
+        <CommandFlag>DontCache</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <CommandName>cmdIdCollapseAll</CommandName>
           <ButtonText>Collapse All</ButtonText>
@@ -111,6 +115,8 @@
       <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdRun" priority="0x0110" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarRunGroupID"/>
         <Icon guid="guidImages" id="bmpPicRun" />
+        <CommandFlag>DontCache</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <CommandName>cmdIdRun</CommandName>
           <ButtonText>Run</ButtonText>
@@ -120,6 +126,8 @@
       <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdRunDry" priority="0x0111" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarRunGroupID"/>
         <Icon guid="guidImages" id="bmpPicRunDry" />
+        <CommandFlag>DontCache</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <CommandName>cmdIdRunDry</CommandName>
           <ButtonText>Run Once (Dry Run)</ButtonText>
@@ -131,6 +139,7 @@
       <Combo guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdGroupBy" defaultWidth="150" type="DropDownCombo" idCommandList="cmdIdGroupByList" priority="0x0104">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarGroupByGroupID" />
         <CommandFlag>IconAndText</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <CommandName>cmdIdGroupBy</CommandName>
           <ButtonText>Group By:</ButtonText>

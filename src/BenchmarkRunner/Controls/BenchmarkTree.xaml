@@ -8,7 +8,40 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
-        <TreeView Name="trvBenchmarks" ItemsSource="{Binding Nodes}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="Auto" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEmpty}" Value="True">
+                                <Setter Property="Height" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="Auto" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsFinished}" Value="True">
+                                <Setter Property="Height" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
+            </Grid.RowDefinitions>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibility2"/>
+        </Grid.Resources>
+        <TreeView Grid.Row="0" Grid.Column="0" Name="trvBenchmarks" ItemsSource="{Binding Nodes}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" PreviewMouseRightButtonDown="TrvBenchmarks_PreviewMouseRightButtonDown">
             <TreeView.Resources>
                 <ContextMenu x:Key="NodeContextMenu">
                     <MenuItem Name="Run" Header="Run" Command="{Binding RunSelectedCommand}">
@@ -163,5 +196,8 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="loading..." Foreground="#FF595959" Margin="3,0,0,0" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility2}, FallbackValue=Hidden}" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="No Benchmarks found in current Solution." Margin="3,0,0,0" Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibility2}, FallbackValue=Hidden}" />
+    </Grid>
     </DockPanel>
 </UserControl>

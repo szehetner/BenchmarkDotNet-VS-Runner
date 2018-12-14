@@ -26,12 +26,16 @@ namespace BenchmarkRunner.Model
             Task.Run(() => RunDiscovery(benchmarks, buffer));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
+            _treeViewModel.IsLoading = true;
+            _treeViewModel.IsEmpty = false;
             _treeViewModel.Nodes = new ObservableCollection<BenchmarkTreeNode>();
             
             ProjectBenchmarkTreeNode lastProjectNode = null;
             while (await buffer.OutputAvailableAsync())
             {
                 Benchmark currentBenchmark = await buffer.ReceiveAsync();
+                _treeViewModel.IsLoading = false;
+
                 var projectNode = (ProjectBenchmarkTreeNode)GetOrInsertNode(_treeViewModel.Nodes, currentBenchmark.ProjectName, () => CreateProjectNode(currentBenchmark));
                 if (lastProjectNode != null && projectNode != lastProjectNode)
                     lastProjectNode.IsLoading = false;
@@ -39,7 +43,12 @@ namespace BenchmarkRunner.Model
                 BuildHierarchy(_treeViewModel.Nodes, projectNode, currentBenchmark);
                 lastProjectNode = projectNode;
             }
-            lastProjectNode.IsLoading = false;
+            if (lastProjectNode != null)
+                lastProjectNode.IsLoading = false;
+            _treeViewModel.IsLoading = false;
+
+            if (_treeViewModel.Nodes.Count == 0)
+                _treeViewModel.IsEmpty = true;
         }
 
         private void RunDiscovery(IEnumerable<Benchmark> benchmarks, BufferBlock<Benchmark> buffer)

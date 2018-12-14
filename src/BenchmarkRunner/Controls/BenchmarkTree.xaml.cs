@@ -30,5 +30,24 @@ namespace BenchmarkRunner.Controls
         {
             get { return (BenchmarkTreeNode)trvBenchmarks.SelectedItem; }
         }
+
+        private void TrvBenchmarks_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                treeViewItem.Focus();
+                e.Handled = true;
+            }
+        }
+
+        static TreeViewItem VisualUpwardSearch(DependencyObject source)
+        {
+            while (source != null && !(source is TreeViewItem))
+                source = VisualTreeHelper.GetParent(source);
+
+            return source as TreeViewItem;
+        }
     }
 }

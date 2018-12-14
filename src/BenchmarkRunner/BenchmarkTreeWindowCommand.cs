@@ -58,6 +58,12 @@ namespace BenchmarkRunner
         [Import]
         internal VisualStudioWorkspace Workspace;
 
+        private MenuCommand _runCommand;
+        private MenuCommand _runDryCommand;
+        private MenuCommand _expandAllCommand;
+        private MenuCommand _collapseAllCommand;
+        private MenuCommand _groupByCommand;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BenchmarkTreeWindowCommand"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
@@ -75,15 +81,31 @@ namespace BenchmarkRunner
             commandService.AddCommand(new MenuCommand(ShowToolWindow, new CommandID(CommandSet, CommandId)));
 
             commandService.AddCommand(new MenuCommand(new EventHandler(Refresh), new CommandID(CommandSet, cmdIdRefresh)));
-            
-            commandService.AddCommand(new MenuCommand(new EventHandler(RunNormal), new CommandID(CommandSet, cmdIdRun)));
-            commandService.AddCommand(new MenuCommand(new EventHandler(RunDry), new CommandID(CommandSet, cmdIdRunDry)));
 
-            commandService.AddCommand(new MenuCommand(new EventHandler(ExpandAll), new CommandID(CommandSet, cmdIdExpandAll)));
-            commandService.AddCommand(new MenuCommand(new EventHandler(CollapseAll), new CommandID(CommandSet, cmdIdCollapseAll)));
+            _runCommand = new MenuCommand(new EventHandler(RunNormal), new CommandID(CommandSet, cmdIdRun)) { Enabled = false };
+            commandService.AddCommand(_runCommand);
 
-            commandService.AddCommand(new OleMenuCommand(GroupByHandler, new CommandID(CommandSet, cmdIdGroupBy)));
+            _runDryCommand = new MenuCommand(new EventHandler(RunDry), new CommandID(CommandSet, cmdIdRunDry)) { Enabled = false };
+            commandService.AddCommand(_runDryCommand);
+
+            _expandAllCommand = new MenuCommand(new EventHandler(ExpandAll), new CommandID(CommandSet, cmdIdExpandAll)) { Enabled = false };
+            commandService.AddCommand(_expandAllCommand);
+
+            _collapseAllCommand = new MenuCommand(new EventHandler(CollapseAll), new CommandID(CommandSet, cmdIdCollapseAll)) { Enabled = false };
+            commandService.AddCommand(_collapseAllCommand);
+
+            _groupByCommand = new OleMenuCommand(GroupByHandler, new CommandID(CommandSet, cmdIdGroupBy)) { Enabled = false };
+            commandService.AddCommand(_groupByCommand);
             commandService.AddCommand(new OleMenuCommand(GroupByListHandler, new CommandID(CommandSet, cmdIdGroupByList)));
+        }
+
+        private void EnableIfFinished(object sender, EventArgs e)
+        {
+            var myCommand = sender as OleMenuCommand;
+            if (null == myCommand)
+                return;
+
+            myCommand.Enabled = _treeViewModel.IsFinished;
         }
 
         private string selectedGrouping = GroupName.PROJECT_CLASS;
@@ -137,9 +159,16 @@ namespace BenchmarkRunner
             try
             {
                 var discoverer = new WorkspaceBenchmarkDiscoverer(Workspace);
+                _treeViewModel.IsLoading = true;
                 await discoverer.InitializeAsync();
 
+                _expandAllCommand.Enabled = true;
+                _collapseAllCommand.Enabled = true;
                 await _treeViewModel.RefreshAsync(discoverer, GroupName.GetValue(selectedGrouping));
+
+                _runCommand.Enabled = _treeViewModel.IsFinished;
+                _runDryCommand.Enabled = _treeViewModel.IsFinished;
+                _groupByCommand.Enabled = _treeViewModel.IsFinished;
             }
             catch (Exception ex)
             {
@@ -208,7 +237,18 @@ namespace BenchmarkRunner
             var container = await package.GetServiceAsync(typeof(Microsoft.VisualStudio.ComponentModelHost.SComponentModel)) as Microsoft.VisualStudio.ComponentModelHost.IComponentModel;
             container.DefaultCompositionService.SatisfyImportsOnce(Instance);
 
+            Instance.Workspace.WorkspaceChanged += Instance.Workspace_WorkspaceChanged;
             Instance._commandHandler = new CommandHandler(Instance);
+        }
+
+        private void Workspace_WorkspaceChanged(object sender, WorkspaceChangeEventArgs e)
+        {
+            if (e.Kind == WorkspaceChangeKind.SolutionAdded || e.Kind == WorkspaceChangeKind.SolutionRemoved)
+            {
+                _treeViewModel.Nodes.Clear();
+                _treeViewModel.IsLoading = false;
+                _treeViewModel.IsEmpty = false;
+            }
         }
 
         /// <summary>
