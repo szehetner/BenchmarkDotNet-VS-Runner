@@ -17,16 +17,18 @@
         public BenchmarkTreeWindowControl()
         {
             this.InitializeComponent();
+
+            _viewModel = new ToolWindowViewModel();
+            DataContext = _viewModel;
         }
 
-        public BenchmarkTreeViewModel InitializeViewModel(CommandHandler commandHandler)
+        public ToolWindowViewModel InitializeViewModel(CommandHandler commandHandler)
         {
-            _viewModel = new BenchmarkTreeViewModel(commandHandler);
-            BenchmarkTree.DataContext = _viewModel;
+            _viewModel.TreeViewModel = new BenchmarkTreeViewModel(commandHandler);
             return _viewModel;
         }
 
-        private BenchmarkTreeViewModel _viewModel;
+        private ToolWindowViewModel _viewModel;
 
         public BenchmarkTreeNode SelectedItem => BenchmarkTree.SelectedItem;
     }

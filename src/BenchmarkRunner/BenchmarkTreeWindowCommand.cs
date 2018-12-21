@@ -34,7 +34,11 @@ namespace BenchmarkRunner
         public const int cmdIdGroupByList = 0x137;
         public const int cmdIdExpandAll = 0x133;
         public const int cmdIdCollapseAll = 0x134;
-        
+        public const int cmdIdResultsVertical = 0x138;
+        public const int cmdIdResultsHorizontal = 0x139;
+        public const int cmdIdResultsNone = 0x140;
+
+
         public const int ToolbarID = 0x1000;
 
         /// <summary>
@@ -53,7 +57,7 @@ namespace BenchmarkRunner
         private CommandHandler _commandHandler;
         public CommandHandler CommandHandler => _commandHandler;
 
-        private BenchmarkTreeViewModel _treeViewModel;
+        private ToolWindowViewModel _rootViewModel;
 
         [Import]
         internal VisualStudioWorkspace Workspace;
@@ -63,6 +67,8 @@ namespace BenchmarkRunner
         private MenuCommand _expandAllCommand;
         private MenuCommand _collapseAllCommand;
         private MenuCommand _groupByCommand;
+
+        private int _selectedResultOrientation = cmdIdResultsVertical;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BenchmarkTreeWindowCommand"/> class.
@@ -97,6 +103,43 @@ namespace BenchmarkRunner
             _groupByCommand = new OleMenuCommand(GroupByHandler, new CommandID(CommandSet, cmdIdGroupBy)) { Enabled = false };
             commandService.AddCommand(_groupByCommand);
             commandService.AddCommand(new OleMenuCommand(GroupByListHandler, new CommandID(CommandSet, cmdIdGroupByList)));
+
+            OleMenuCommand mc = new OleMenuCommand(new EventHandler(OnResultOrientationClicked), new CommandID(CommandSet, cmdIdResultsNone));
+            mc.BeforeQueryStatus += new EventHandler(OnResultOrientationQueryStatus);
+            commandService.AddCommand(mc);
+            mc.Checked = true;
+
+            mc = new OleMenuCommand(new EventHandler(OnResultOrientationClicked), new CommandID(CommandSet, cmdIdResultsVertical));
+            mc.BeforeQueryStatus += new EventHandler(OnResultOrientationQueryStatus);
+            commandService.AddCommand(mc);
+
+            OleMenuCommand mc2 = new OleMenuCommand(new EventHandler(OnResultOrientationClicked), new CommandID(CommandSet, cmdIdResultsHorizontal));
+            mc2.BeforeQueryStatus += new EventHandler(OnResultOrientationQueryStatus);
+            commandService.AddCommand(mc2);
+        }
+
+        private void OnResultOrientationQueryStatus(object sender, EventArgs e)
+        {
+            OleMenuCommand mc = sender as OleMenuCommand;
+            if (null != mc)
+            {
+                mc.Checked = (mc.CommandID.ID == _selectedResultOrientation);
+            }
+        }
+
+        private void OnResultOrientationClicked(object sender, EventArgs e)
+        {
+            OleMenuCommand mc = sender as OleMenuCommand;
+            if (null != mc)
+            {
+                _selectedResultOrientation = mc.CommandID.ID;
+                if (_selectedResultOrientation == cmdIdResultsHorizontal)
+                    _rootViewModel.SetResultOrientation(ResultOrientation.Bottom);
+                else if (_selectedResultOrientation == cmdIdResultsVertical)
+                    _rootViewModel.SetResultOrientation(ResultOrientation.Right);
+                else
+                    _rootViewModel.SetResultOrientation(ResultOrientation.None);
+            }
         }
 
         private void EnableIfFinished(object sender, EventArgs e)
@@ -105,7 +148,7 @@ namespace BenchmarkRunner
             if (null == myCommand)
                 return;
 
-            myCommand.Enabled = _treeViewModel.IsFinished;
+            myCommand.Enabled = _rootViewModel.TreeViewModel.IsFinished;
         }
 
         private string selectedGrouping = GroupName.PROJECT_CLASS;
@@ -136,7 +179,7 @@ namespace BenchmarkRunner
 
                 try
                 {
-                    await _treeViewModel.SetGroupingAsync(GroupName.GetValue(selectedGrouping));
+                    await _rootViewModel.TreeViewModel.SetGroupingAsync(GroupName.GetValue(selectedGrouping));
                 }
                 catch (Exception ex)
                 {
@@ -159,16 +202,16 @@ namespace BenchmarkRunner
             try
             {
                 var discoverer = new WorkspaceBenchmarkDiscoverer(Workspace);
-                _treeViewModel.IsLoading = true;
+                _rootViewModel.TreeViewModel.IsLoading = true;
                 await discoverer.InitializeAsync();
 
                 _expandAllCommand.Enabled = true;
                 _collapseAllCommand.Enabled = true;
-                await _treeViewModel.RefreshAsync(discoverer, GroupName.GetValue(selectedGrouping));
+                await _rootViewModel.TreeViewModel.RefreshAsync(discoverer, GroupName.GetValue(selectedGrouping));
 
-                _runCommand.Enabled = _treeViewModel.IsFinished;
-                _runDryCommand.Enabled = _treeViewModel.IsFinished;
-                _groupByCommand.Enabled = _treeViewModel.IsFinished;
+                _runCommand.Enabled = _rootViewModel.TreeViewModel.IsFinished;
+                _runDryCommand.Enabled = _rootViewModel.TreeViewModel.IsFinished;
+                _groupByCommand.Enabled = _rootViewModel.TreeViewModel.IsFinished;
             }
             catch (Exception ex)
             {
@@ -178,12 +221,12 @@ namespace BenchmarkRunner
 
         private void ExpandAll(object sender, EventArgs arguments)
         {
-            _treeViewModel.ExpandAll();
+            _rootViewModel.TreeViewModel.ExpandAll();
         }
 
         private void CollapseAll(object sender, EventArgs arguments)
         {
-            _treeViewModel.CollapseAll();
+            _rootViewModel.TreeViewModel.CollapseAll();
         }
                 
         private async void RunNormal(object sender, EventArgs arguments)
@@ -196,9 +239,9 @@ namespace BenchmarkRunner
             await _commandHandler.RunAsync(true);
         }
 
-        public void SetViewModel(BenchmarkTreeViewModel viewModel)
+        public void SetViewModel(ToolWindowViewModel viewModel)
         {
-            _treeViewModel = viewModel;
+            _rootViewModel = viewModel;
         }
 
         /// <summary>
@@ -245,9 +288,9 @@ namespace BenchmarkRunner
         {
             if (e.Kind == WorkspaceChangeKind.SolutionAdded || e.Kind == WorkspaceChangeKind.SolutionRemoved)
             {
-                _treeViewModel.Nodes.Clear();
-                _treeViewModel.IsLoading = false;
-                _treeViewModel.IsEmpty = false;
+                _rootViewModel.TreeViewModel.Nodes.Clear();
+                _rootViewModel.TreeViewModel.IsLoading = false;
+                _rootViewModel.TreeViewModel.IsEmpty = false;
             }
         }
 

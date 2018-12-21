@@ -10,6 +10,33 @@
              d:DesignHeight="300" d:DesignWidth="300"
              Name="MyToolWindow">
     <Grid>
-        <Controls:BenchmarkTree x:Name="BenchmarkTree" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Column="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.TreeColumn}" 
+                                Grid.Row="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.TreeRow}"
+                                Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.TreeRowSpan}"
+                                Grid.ColumnSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.TreeColumnSpan}"
+                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Controls:BenchmarkTree x:Name="BenchmarkTree" DataContext="{Binding TreeViewModel}" />
+        </ScrollViewer>
+        
+        <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="{Binding VerticalRowSpan}" HorizontalAlignment="Stretch" 
+                      ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Visibility="{Binding VerticalSplitterVisibility}" />
+        
+        <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="{Binding HorizontalColumnSpan}"  HorizontalAlignment="Stretch" ResizeDirection="Rows" 
+                      ResizeBehavior="PreviousAndNext" Visibility="{Binding HorizontalSplitterVisibility}" />
+
+        <Controls:ResultControl x:Name="ResultControl" Grid.Column="{Binding ResultsColumn}" Grid.Row="{Binding ResultsRow}"
+                                Grid.RowSpan="{Binding ResultsRowSpan}"
+                                Grid.ColumnSpan="{Binding ResultsColumnSpan}" Visibility="{Binding ResultVisibility}"/>
     </Grid>
 </UserControl>

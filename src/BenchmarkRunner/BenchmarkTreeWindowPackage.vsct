@@ -42,6 +42,17 @@
           <CommandName>Tool Window Toolbar</CommandName>
         </Strings>
       </Menu>
+
+      <Menu guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationMenuController" priority="0x1000" type="MenuController">
+        <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupPositionID" />
+        <CommandFlag>TextChanges</CommandFlag>
+        <CommandFlag>TextIsAnchorCommand</CommandFlag>
+        <Strings>
+          <ButtonText>Results</ButtonText>
+          <CommandName>ResutsOrientation</CommandName>
+        </Strings>
+      </Menu>
+      
     </Menus>
 
     <Groups>
@@ -61,6 +72,13 @@
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarID" />
       </Group>
 
+      <Group guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupPositionID" priority="0x0004">
+        <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarID" />
+      </Group>
+
+      <Group guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupID" priority="0x0004">
+        <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationMenuController" />
+      </Group>
       
     </Groups>
 
@@ -133,7 +151,38 @@
           <ButtonText>Run Once (Dry Run)</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdResultsNone" priority="0x0112" type="Button">
+        <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupID"/>
+        <Icon guid="guidRowNoResults" id="bmpPicNoResults" />
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <CommandName>cmdIdResultsVertical</CommandName>
+          <ButtonText>Results Hidden</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdResultsVertical" priority="0x0113" type="Button">
+        <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupID"/>
+        <Icon guid="guidColumnImages" id="bmpPicColumns" />
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <CommandName>cmdIdResultsVertical</CommandName>
+          <ButtonText>Results Right</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdResultsHorizontal" priority="0x0114" type="Button">
+        <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupID"/>
+        <Icon guid="guidRowImages" id="bmpPicRows" />
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <CommandName>cmdIdResultsHorizontal</CommandName>
+          <ButtonText>Results Bottom</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
+    
 
     <Combos>
       <Combo guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdGroupBy" defaultWidth="150" type="DropDownCombo" idCommandList="cmdIdGroupByList" priority="0x0104">
@@ -155,6 +204,9 @@
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
       <Bitmap guid="guidImages" href="Resources\BenchmarkTreeWindowCommand.png" usedList="bmpPicRefresh, bmpPicRun, bmpPicGroupBy, bmpPicOptions, bmpPicBenchmarks, bmpPicExpandAll, bmpPicCollapseAll, bmpPicRunDry"/>
+      <Bitmap guid="guidColumnImages" href="Resources\Columns.png" usedList="bmpPicColumns"/>
+      <Bitmap guid="guidRowImages" href="Resources\Rows.png" usedList="bmpPicRows"/>
+      <Bitmap guid="guidRowNoResults" href="Resources\NoResults.png" usedList="bmpPicNoResults"/>
     </Bitmaps>
   </Commands>
 
@@ -170,8 +222,13 @@
       <IDSymbol name="ToolbarDiscoverGroupID" value="0x1002" />
       <IDSymbol name="ToolbarRunGroupID" value="0x1003" />
       <IDSymbol name="ToolbarGroupByGroupID" value="0x1004" />
-      <IDSymbol name="cmdIdToolbarCommands" value="0x0100" />
       
+      <IDSymbol name="ResultOrientationMenuController" value="0x1005" />
+      <IDSymbol name="ResultOrientationGroupPositionID" value="0x1006" />
+      <IDSymbol name="ResultOrientationGroupID" value="0x1007" />
+      
+      <IDSymbol name="cmdIdToolbarCommands" value="0x0100" />
+
       <IDSymbol name="cmdIdRefresh" value="0x131" />
       <IDSymbol name="cmdIdGroupBy" value="0x132" />
       <IDSymbol name="cmdIdGroupByList" value="0x137" />
@@ -180,6 +237,10 @@
 
       <IDSymbol name="cmdIdRun" value="0x135" />
       <IDSymbol name="cmdIdRunDry" value="0x136" />
+
+      <IDSymbol name="cmdIdResultsVertical" value="0x138" />
+      <IDSymbol name="cmdIdResultsHorizontal" value="0x139" />
+      <IDSymbol name="cmdIdResultsNone" value="0x140" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{b68bab6f-78bf-4c19-9504-5f433592139a}" >
@@ -191,6 +252,18 @@
       <IDSymbol name="bmpPicExpandAll" value="6" />
       <IDSymbol name="bmpPicCollapseAll" value="7" />
       <IDSymbol name="bmpPicRunDry" value="8" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidColumnImages" value="{271218E5-5C46-4CD1-A512-CD411761F15C}" >
+      <IDSymbol name="bmpPicColumns" value="1" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidRowImages" value="{4D5A5895-ACD7-4629-977C-CBDB958312A6}" >
+      <IDSymbol name="bmpPicRows" value="1" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidRowNoResults" value="{8554F33A-D0D8-4DCE-83C1-CB12DDB739DC}" >
+      <IDSymbol name="bmpPicNoResults" value="1" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

@@ -65,6 +65,9 @@
     </Compile>
     <Compile Include="Controls\Helper\AsyncDelegateCommand.cs" />
     <Compile Include="Controls\Helper\DelegateCommand.cs" />
+    <Compile Include="Controls\ResultControl.xaml.cs">
+      <DependentUpon>ResultControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\Benchmark.cs" />
     <Compile Include="Model\BenchmarkNodeBuilder.cs" />
     <Compile Include="Model\BenchmarkTreeNode.cs" />
@@ -73,6 +76,8 @@
     <Compile Include="Model\Discovery\MethodVisitor.cs" />
     <Compile Include="Model\Discovery\WorkspaceBenchmarkDiscoverer.cs" />
     <Compile Include="Model\Grouping.cs" />
+    <Compile Include="Model\ReportFinder.cs" />
+    <Compile Include="Model\ToolWindowViewModel.cs" />
     <Compile Include="ProjectSystem\CommonProjectPropertyProvider.cs" />
     <Compile Include="ProjectSystem\IProjectPropertyProvider.cs" />
     <Compile Include="ProjectSystem\LegacyProjectPropertyProvider.cs" />
@@ -90,6 +95,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Columns.png" />
+    <Resource Include="Resources\FolderOpen.png" />
+    <Content Include="Resources\NoResults.png" />
+    <Content Include="Resources\Rows.png" />
+    <Resource Include="Resources\TextFile.png" />
     <Content Include="System.Threading.Tasks.Dataflow.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -197,6 +207,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\BenchmarkTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ResultControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

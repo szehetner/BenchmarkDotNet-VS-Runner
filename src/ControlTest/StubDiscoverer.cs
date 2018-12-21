@@ -12,47 +12,47 @@ namespace ControlTest
     {
         public IEnumerable<Benchmark> FindBenchmarks()
         {
+            //Thread.Sleep(2000);
+            //yield break;
+            yield return new Benchmark
+            {
+                ProjectName = "Project1",
+                Namespace = "Namespace.Sub",
+                ClassName = "Class1",
+                MethodName = "Method1"
+            };
+            Thread.Sleep(500);
+            yield return new Benchmark
+            {
+                ProjectName = "Project1",
+                Namespace = "Namespace.Sub",
+                ClassName = "Class1",
+                MethodName = "Method2"
+            };
             Thread.Sleep(2000);
-            yield break;
-            //yield return new Benchmark
-            //{
-            //    ProjectName = "Project1",
-            //    Namespace = "Namespace.Sub",
-            //    ClassName = "Class1",
-            //    MethodName = "Method1"
-            //};
-            //Thread.Sleep(500);
-            //yield return new Benchmark
-            //{
-            //    ProjectName = "Project1",
-            //    Namespace = "Namespace.Sub",
-            //    ClassName = "Class1",
-            //    MethodName = "Method2"
-            //};
-            //Thread.Sleep(2000);
-            //yield return new Benchmark
-            //{
-            //    ProjectName = "Project1",
-            //    Namespace = "Namespace.Sub",
-            //    ClassName = "Class2",
-            //    MethodName = "MethodA"
-            //};
-            //Thread.Sleep(2000);
-            //yield return new Benchmark
-            //{
-            //    ProjectName = "Project1",
-            //    Namespace = "Namespace.Sub2",
-            //    ClassName = "Class3",
-            //    MethodName = "MethodC"
-            //};
-            //Thread.Sleep(2000);
-            //yield return new Benchmark
-            //{
-            //    ProjectName = "Project1",
-            //    Namespace = "Namespace.Sub2",
-            //    ClassName = "Class4",
-            //    MethodName = "MethodD"
-            //};
+            yield return new Benchmark
+            {
+                ProjectName = "Project1",
+                Namespace = "Namespace.Sub",
+                ClassName = "Class2",
+                MethodName = "MethodA"
+            };
+            Thread.Sleep(2000);
+            yield return new Benchmark
+            {
+                ProjectName = "Project1",
+                Namespace = "Namespace.Sub2",
+                ClassName = "Class3",
+                MethodName = "MethodC"
+            };
+            Thread.Sleep(2000);
+            yield return new Benchmark
+            {
+                ProjectName = "Project1",
+                Namespace = "Namespace.Sub2",
+                ClassName = "Class4",
+                MethodName = "MethodD"
+            };
         }
 
         public Task InitializeAsync()
