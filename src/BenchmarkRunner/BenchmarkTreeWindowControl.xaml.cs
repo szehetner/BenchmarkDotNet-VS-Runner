@@ -25,6 +25,7 @@
         public ToolWindowViewModel InitializeViewModel(CommandHandler commandHandler)
         {
             _viewModel.TreeViewModel = new BenchmarkTreeViewModel(commandHandler);
+            _viewModel.ResultsViewModel = new ResultsViewModel();
             return _viewModel;
         }
 

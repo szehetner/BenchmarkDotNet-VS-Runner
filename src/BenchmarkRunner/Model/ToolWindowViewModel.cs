@@ -25,8 +25,35 @@ namespace BenchmarkRunner.Model
         private Visibility _verticalSplitterVisibility = Visibility.Visible;
         private Visibility _resultVisibility = Visibility.Collapsed;
         private BenchmarkTreeViewModel _treeViewModel;
+        private ResultsViewModel _resultsViewModel;
 
-        public BenchmarkTreeViewModel TreeViewModel { get => _treeViewModel; set { _treeViewModel = value; OnPropertyChanged(); } }
+        public BenchmarkTreeViewModel TreeViewModel
+        {
+            get => _treeViewModel;
+            set
+            {
+                _treeViewModel = value;
+                _treeViewModel.PropertyChanged += TreeViewModel_PropertyChanged;
+                OnPropertyChanged();
+            }
+        }
+
+        private void TreeViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(BenchmarkTreeViewModel.SelectedBenchmark))
+                ResultsViewModel.SetSelectedBenchmark(_treeViewModel.SelectedBenchmark.Benchmark);
+        }
+
+        public ResultsViewModel ResultsViewModel
+        {
+            get => _resultsViewModel;
+            set
+            {
+                _resultsViewModel = value;
+                
+                OnPropertyChanged();
+            }
+        }
 
         public Visibility HorizontalSplitterVisibility { get => _horizontalSplitterVisibility; set { _horizontalSplitterVisibility = value; OnPropertyChanged(); } }
         public Visibility VerticalSplitterVisibility { get => _verticalSplitterVisibility; set { _verticalSplitterVisibility = value; OnPropertyChanged(); } }

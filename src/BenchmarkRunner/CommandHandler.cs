@@ -9,6 +9,7 @@ using BenchmarkRunner.Runner;
 using Microsoft.VisualStudio.LanguageServices;
 using System.Threading;
 using Microsoft.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace BenchmarkRunner
 {
@@ -38,8 +39,7 @@ namespace BenchmarkRunner
                 if (project == null)
                     return;
 
-                var propertyProvider = ProjectPropertyProviderFactory.Create(project);
-                await propertyProvider.LoadPropertiesAsync();
+                var propertyProvider = await CreateProjectPropertyProviderAsync(selectedNode.ProjectName);
 
                 try
                 {
@@ -90,7 +90,19 @@ namespace BenchmarkRunner
             }
         }
 
-        private EnvDTE.Project GetProject(DTE2 dte2, string name)
+        public static async Task<IProjectPropertyProvider> CreateProjectPropertyProviderAsync(string projectName)
+        {
+            var dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
+            EnvDTE.Project project = GetProject(dte2, projectName);
+            if (project == null)
+                return null;
+
+            var propertyProvider = ProjectPropertyProviderFactory.Create(project);
+            await propertyProvider.LoadPropertiesAsync();
+            return propertyProvider;
+        }
+
+        private static EnvDTE.Project GetProject(DTE2 dte2, string name)
         {
             foreach (EnvDTE.Project project in dte2.Solution.Projects)
             {

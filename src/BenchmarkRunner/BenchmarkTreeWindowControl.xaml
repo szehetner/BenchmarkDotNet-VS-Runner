@@ -35,8 +35,11 @@
         <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="{Binding HorizontalColumnSpan}"  HorizontalAlignment="Stretch" ResizeDirection="Rows" 
                       ResizeBehavior="PreviousAndNext" Visibility="{Binding HorizontalSplitterVisibility}" />
 
-        <Controls:ResultControl x:Name="ResultControl" Grid.Column="{Binding ResultsColumn}" Grid.Row="{Binding ResultsRow}"
-                                Grid.RowSpan="{Binding ResultsRowSpan}"
-                                Grid.ColumnSpan="{Binding ResultsColumnSpan}" Visibility="{Binding ResultVisibility}"/>
+        <Controls:ResultControl x:Name="ResultControl" DataContext="{Binding ResultsViewModel}" 
+                                Grid.Column="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.ResultsColumn}" 
+                                Grid.Row="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.ResultsRow}"
+                                Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.ResultsRowSpan}"
+                                Grid.ColumnSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.ResultsColumnSpan}" 
+                                Visibility="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.ResultVisibility}"/>
     </Grid>
 </UserControl>

@@ -53,6 +53,17 @@ namespace BenchmarkRunner.Model
             BenchmarkNodeBuilder nodeBuilder = new BenchmarkNodeBuilder(this, grouping);
             await nodeBuilder.RebuildNodesAsync(_discoveredBenchmarks);
         }
+        
+        private BenchmarkTreeNode _selectedBenchmark;
+        public BenchmarkTreeNode SelectedBenchmark
+        {
+            get { return _selectedBenchmark; }
+            set
+            {
+                _selectedBenchmark = value;
+                OnPropertyChanged();
+            }
+        }
 
         public void ExpandAll()
         {

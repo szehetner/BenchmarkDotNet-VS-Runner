@@ -14,14 +14,19 @@ namespace BenchmarkRunner.Model
 
         private static Dictionary<string, BenchmarkResult> _results = new Dictionary<string, BenchmarkResult>();
 
-        public static Task<BenchmarkResultCollection> CreateAsync(string outputDirectory)
+        public static async Task<BenchmarkResultCollection> CreateAsync(string projectName)
         {
-            return Task.Run(() => new BenchmarkResultCollection(outputDirectory));
+            var propertyProvider = await CommandHandler.CreateProjectPropertyProviderAsync(projectName);
+            
+            return await Task.Run(() => new BenchmarkResultCollection(propertyProvider.OutputPath));
         }
 
         public BenchmarkResultCollection(string outputDirectory)
         {
             string artifactsRoot = Path.Combine(outputDirectory, ARTIFACTS_FOLDER);
+            if (!Directory.Exists(artifactsRoot))
+                return;
+
             IEnumerable<string> logFiles = Directory.EnumerateFiles(artifactsRoot, "*.log");
             ProcessLogfiles(logFiles);
 
@@ -104,6 +109,12 @@ namespace BenchmarkRunner.Model
                 }
             }
             return stringBuilder.ToString();
+        }
+
+        internal BenchmarkResult GetResult(string benchmarkName)
+        {
+            _results.TryGetValue(benchmarkName, out var result);
+            return result;
         }
     }
 

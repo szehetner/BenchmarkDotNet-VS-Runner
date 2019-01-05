@@ -55,13 +55,15 @@ namespace BenchmarkRunner.Model
             }
         }
 
-
         public bool IsSelected
         {
             get { return _isSelected; }
             set
             {
                 _isSelected = value;
+                if (_isSelected)
+                    TreeViewModel.SelectedBenchmark = this;
+
                 OnPropertyChanged();
             }
         }

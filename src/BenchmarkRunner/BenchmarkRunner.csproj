@@ -76,7 +76,8 @@
     <Compile Include="Model\Discovery\MethodVisitor.cs" />
     <Compile Include="Model\Discovery\WorkspaceBenchmarkDiscoverer.cs" />
     <Compile Include="Model\Grouping.cs" />
-    <Compile Include="Model\ReportFinder.cs" />
+    <Compile Include="Model\BenchmarkResultCollection.cs" />
+    <Compile Include="Model\ResultsViewModel.cs" />
     <Compile Include="Model\ToolWindowViewModel.cs" />
     <Compile Include="ProjectSystem\CommonProjectPropertyProvider.cs" />
     <Compile Include="ProjectSystem\IProjectPropertyProvider.cs" />

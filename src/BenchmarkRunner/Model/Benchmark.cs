@@ -18,5 +18,7 @@ namespace BenchmarkRunner.Model
         public ISymbol MethodSymbol { get; set; }
         public ISymbol ClassSymbol { get; set; }
         public Project Project { get; set; }
+
+        public BenchmarkResult LastResult { get; set; }
     }
 }

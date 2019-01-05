@@ -31,27 +31,6 @@
                 </StackPanel>
             </Button>
         </ToolBar>
-        <TextBox Grid.Row="1" TextWrapping="Wrap" IsReadOnly="True" FontFamily="Consolas">Results Results Results Results Results Results Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results 
-            Results Results esults Results Results Results Results Results Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results 
-            Results Resultsesults Results Results Results Results Results Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results 
-            Results Resultsesults Results Results Results Results Results Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results 
-            Results Resultsesults Results Results Results Results Results Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results Results Results 
-            Results Results Results Results Results Results Results Results 
-            Results Results</TextBox>
-        
+        <TextBox Grid.Row="1" TextWrapping="Wrap" IsReadOnly="True" FontFamily="Consolas" Text="{Binding PreviewContent}" />
     </Grid>
 </UserControl>
