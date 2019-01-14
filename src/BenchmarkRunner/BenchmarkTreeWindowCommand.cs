@@ -37,7 +37,7 @@ namespace BenchmarkRunner
         public const int cmdIdResultsVertical = 0x138;
         public const int cmdIdResultsHorizontal = 0x139;
         public const int cmdIdResultsNone = 0x140;
-
+        public const int cmdIdOpenFolder = 0x141;
 
         public const int ToolbarID = 0x1000;
 
@@ -67,8 +67,9 @@ namespace BenchmarkRunner
         private MenuCommand _expandAllCommand;
         private MenuCommand _collapseAllCommand;
         private MenuCommand _groupByCommand;
+        private MenuCommand _openFolderCommand;
 
-        private int _selectedResultOrientation = cmdIdResultsVertical;
+        private int _selectedResultOrientation = cmdIdResultsNone;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BenchmarkTreeWindowCommand"/> class.
@@ -116,8 +117,11 @@ namespace BenchmarkRunner
             OleMenuCommand mc2 = new OleMenuCommand(new EventHandler(OnResultOrientationClicked), new CommandID(CommandSet, cmdIdResultsHorizontal));
             mc2.BeforeQueryStatus += new EventHandler(OnResultOrientationQueryStatus);
             commandService.AddCommand(mc2);
-        }
 
+            _openFolderCommand = new MenuCommand(new EventHandler(OpenReportFolder), new CommandID(CommandSet, cmdIdOpenFolder)) { Enabled = false };
+            commandService.AddCommand(_openFolderCommand);
+        }
+        
         private void OnResultOrientationQueryStatus(object sender, EventArgs e)
         {
             OleMenuCommand mc = sender as OleMenuCommand;
@@ -239,9 +243,20 @@ namespace BenchmarkRunner
             await _commandHandler.RunAsync(true);
         }
 
+        private async void OpenReportFolder(object sender, EventArgs e)
+        {
+            await _commandHandler.OpenReportFolderAsync();
+        }
+
         public void SetViewModel(ToolWindowViewModel viewModel)
         {
             _rootViewModel = viewModel;
+            _rootViewModel.SelectedBenchmarkChanged += RootViewModel_SelectedBenchmarkChanged;
+        }
+
+        private void RootViewModel_SelectedBenchmarkChanged(object sender, EventArgs e)
+        {
+            _openFolderCommand.Enabled = _rootViewModel.TreeViewModel.SelectedBenchmark != null;
         }
 
         /// <summary>

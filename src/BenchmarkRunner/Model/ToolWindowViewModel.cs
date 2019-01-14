@@ -27,6 +27,13 @@ namespace BenchmarkRunner.Model
         private BenchmarkTreeViewModel _treeViewModel;
         private ResultsViewModel _resultsViewModel;
 
+        public event EventHandler SelectedBenchmarkChanged;
+
+        public void OnSelectedBenchmarkChanged()
+        {
+            SelectedBenchmarkChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public BenchmarkTreeViewModel TreeViewModel
         {
             get => _treeViewModel;
@@ -41,7 +48,10 @@ namespace BenchmarkRunner.Model
         private void TreeViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(BenchmarkTreeViewModel.SelectedBenchmark))
+            {
                 ResultsViewModel.SetSelectedBenchmark(_treeViewModel.SelectedBenchmark.Benchmark);
+                OnSelectedBenchmarkChanged();
+            }
         }
 
         public ResultsViewModel ResultsViewModel

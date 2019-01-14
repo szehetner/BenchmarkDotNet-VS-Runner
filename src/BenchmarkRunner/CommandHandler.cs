@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.LanguageServices;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace BenchmarkRunner
 {
@@ -31,7 +32,6 @@ namespace BenchmarkRunner
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(_package.DisposalToken);
 
                 var toolWindow = (BenchmarkTreeWindow)_package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, false);
-
                 BenchmarkTreeNode selectedNode = toolWindow.SelectedItem;
 
                 var dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
@@ -39,7 +39,7 @@ namespace BenchmarkRunner
                 if (project == null)
                     return;
 
-                var propertyProvider = await CreateProjectPropertyProviderAsync(selectedNode.ProjectName);
+                var propertyProvider = await CreateProjectPropertyProviderAsync(project.Name);
 
                 try
                 {
@@ -90,6 +90,17 @@ namespace BenchmarkRunner
             }
         }
 
+        public async Task OpenReportFolderAsync()
+        {
+            var toolWindow = (BenchmarkTreeWindow)_package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, false);
+            BenchmarkTreeNode selectedNode = toolWindow.SelectedItem;
+            if (selectedNode == null)
+                return;
+            
+            string reportFolder = await BenchmarkResultCollection.GetReportFolderAsync(selectedNode.ProjectName);
+            Process.Start(reportFolder);
+        }
+        
         public static async Task<IProjectPropertyProvider> CreateProjectPropertyProviderAsync(string projectName)
         {
             var dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));

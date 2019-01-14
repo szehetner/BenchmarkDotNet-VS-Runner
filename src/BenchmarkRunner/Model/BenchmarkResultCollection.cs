@@ -21,6 +21,12 @@ namespace BenchmarkRunner.Model
             return await Task.Run(() => new BenchmarkResultCollection(propertyProvider.OutputPath));
         }
 
+        public static async Task<string> GetReportFolderAsync(string projectName)
+        {
+            var propertyProvider = await CommandHandler.CreateProjectPropertyProviderAsync(projectName);
+            return Path.Combine(propertyProvider.OutputPath, ARTIFACTS_FOLDER);
+        }
+
         public BenchmarkResultCollection(string outputDirectory)
         {
             string artifactsRoot = Path.Combine(outputDirectory, ARTIFACTS_FOLDER);

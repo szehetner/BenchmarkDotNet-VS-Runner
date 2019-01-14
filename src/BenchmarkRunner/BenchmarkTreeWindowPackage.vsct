@@ -79,7 +79,7 @@
       <Group guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupID" priority="0x0004">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationMenuController" />
       </Group>
-      
+
     </Groups>
 
     <Buttons>
@@ -181,6 +181,17 @@
           <ButtonText>Results Bottom</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdOpenFolder" priority="0x0115" type="Button">
+        <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupPositionID"/>
+        <Icon guid="guidFolderOpen" id="bmpPicFolderOpen" />
+        <CommandFlag>DontCache</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdIdOpenFolder</CommandName>
+          <ButtonText>Open Report Folder</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
     
 
@@ -207,6 +218,7 @@
       <Bitmap guid="guidColumnImages" href="Resources\Columns.png" usedList="bmpPicColumns"/>
       <Bitmap guid="guidRowImages" href="Resources\Rows.png" usedList="bmpPicRows"/>
       <Bitmap guid="guidRowNoResults" href="Resources\NoResults.png" usedList="bmpPicNoResults"/>
+      <Bitmap guid="guidFolderOpen" href="Resources\FolderOpen.png" usedList="bmpPicFolderOpen"/>
     </Bitmaps>
   </Commands>
 
@@ -226,7 +238,7 @@
       <IDSymbol name="ResultOrientationMenuController" value="0x1005" />
       <IDSymbol name="ResultOrientationGroupPositionID" value="0x1006" />
       <IDSymbol name="ResultOrientationGroupID" value="0x1007" />
-      
+
       <IDSymbol name="cmdIdToolbarCommands" value="0x0100" />
 
       <IDSymbol name="cmdIdRefresh" value="0x131" />
@@ -241,6 +253,8 @@
       <IDSymbol name="cmdIdResultsVertical" value="0x138" />
       <IDSymbol name="cmdIdResultsHorizontal" value="0x139" />
       <IDSymbol name="cmdIdResultsNone" value="0x140" />
+      
+      <IDSymbol name="cmdIdOpenFolder" value="0x141" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{b68bab6f-78bf-4c19-9504-5f433592139a}" >
@@ -264,6 +278,10 @@
 
     <GuidSymbol name="guidRowNoResults" value="{8554F33A-D0D8-4DCE-83C1-CB12DDB739DC}" >
       <IDSymbol name="bmpPicNoResults" value="1" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidFolderOpen" value="{8EA28C9C-268C-4F79-8B72-B264E9D2AC34}" >
+      <IDSymbol name="bmpPicFolderOpen" value="1" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>
