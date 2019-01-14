@@ -6,12 +6,19 @@
              xmlns:local="clr-namespace:BenchmarkRunner.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="27" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <ToolBar ToolBarTray.IsLocked="True">
+        <TabControl>
+            <TabItem Header="Summary">
+            <ScrollViewer>
+                <TextBox TextWrapping="Wrap" IsReadOnly="True" FontFamily="Consolas" Text="{Binding Summary, Mode=OneWay}" TextChanged="TextBox_TextChanged" />
+            </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Log">
+                <ScrollViewer>
+                    <TextBox TextWrapping="Wrap" IsReadOnly="True" FontFamily="Consolas" Text="{Binding Log, Mode=OneWay}" TextChanged="TextBox_TextChanged" />
+                </ScrollViewer>
+            </TabItem>
+    </TabControl>
+        <!--<ToolBar ToolBarTray.IsLocked="True">
             <Button ToolTip="Summary">
                 <StackPanel>
                     <Image Source="/BenchmarkRunner;component/Resources/TextFile.png" />
@@ -31,6 +38,5 @@
                 </StackPanel>
             </Button>
         </ToolBar>
-        <TextBox Grid.Row="1" TextWrapping="Wrap" IsReadOnly="True" FontFamily="Consolas" Text="{Binding PreviewContent}" />
-    </Grid>
+        <TextBox Grid.Row="1" TextWrapping="Wrap" IsReadOnly="True" FontFamily="Consolas" Text="{Binding PreviewContent}" />-->
 </UserControl>

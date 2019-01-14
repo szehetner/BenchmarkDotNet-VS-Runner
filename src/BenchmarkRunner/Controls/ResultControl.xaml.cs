@@ -24,5 +24,10 @@ namespace BenchmarkRunner.Controls
         {
             InitializeComponent();
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ((ScrollViewer)((TextBox)sender).Parent).ScrollToBottom();
+        }
     }
 }

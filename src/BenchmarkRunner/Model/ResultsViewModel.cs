@@ -1,6 +1,8 @@
-﻿using System;
+﻿using BenchmarkRunner.Controls.Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -10,17 +12,24 @@ namespace BenchmarkRunner.Model
 {
     public class ResultsViewModel : INotifyPropertyChanged
     {
-        private string _previewContent;
-
-        public string PreviewContent { get => _previewContent; set { _previewContent = value; OnPropertyChanged(); } }
+        private Benchmark _benchmark;
+        private string _logFileContent;
 
         public void SetSelectedBenchmark(Benchmark benchmark)
         {
-            if (benchmark != null)
-                PreviewContent = benchmark.ClassName;
+            _benchmark = benchmark;
+
+            if (benchmark?.LastResult?.LogFileFullPath != null)
+                _logFileContent = File.ReadAllText(benchmark.LastResult.LogFileFullPath);
             else
-                PreviewContent = null;
+                _logFileContent = null;
+
+            OnPropertyChanged(nameof(Summary));
+            OnPropertyChanged(nameof(Log));
         }
+
+        public string Summary => _benchmark?.LastResult?.Summary;
+        public string Log => _logFileContent;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

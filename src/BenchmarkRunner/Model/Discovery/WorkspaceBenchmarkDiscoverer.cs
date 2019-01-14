@@ -82,7 +82,7 @@ namespace BenchmarkRunner.Model
             if (!_results.TryGetValue(project, out var resultTask))
                 return null;
 
-            string benchmarkName = methodSymbol.ContainingNamespace.ToString() + "." + methodSymbol.ContainingType.Name + "." + methodSymbol.Name;
+            string benchmarkName = methodSymbol.ContainingNamespace.ToString() + "." + methodSymbol.ContainingType.Name;// + "." + methodSymbol.Name;
 #pragma warning disable VSTHRD002 // Avoid problematic synchronous waits
             return resultTask.Result.GetResult(benchmarkName);
 #pragma warning restore VSTHRD002 // Avoid problematic synchronous waits

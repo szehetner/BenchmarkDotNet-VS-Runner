@@ -90,7 +90,7 @@ namespace BenchmarkRunner.Model
         {
             var lines = File.ReadLines(logFile);
             StringBuilder stringBuilder = new StringBuilder();
-            bool isInSummary = true;
+            bool isInSummary = false;
             foreach (var line in lines)
             {
                 if (isInSummary && line.StartsWith("// *"))
