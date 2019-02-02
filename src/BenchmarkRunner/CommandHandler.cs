@@ -65,6 +65,7 @@ namespace BenchmarkRunner
                 var runParameters = new RunParameters
                 {
                     OutputPath = propertyProvider.OutputPath,
+                    ProjectPath = propertyProvider.ProjectPath,
                     Runtime = propertyProvider.TargetRuntime,
                     AssemblyPath = propertyProvider.GetOutputFilename(),
                     IsDryRun = isDryRun,

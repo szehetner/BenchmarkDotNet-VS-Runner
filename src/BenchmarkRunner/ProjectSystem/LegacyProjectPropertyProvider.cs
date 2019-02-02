@@ -27,6 +27,8 @@ namespace BenchmarkRunner.ProjectSystem
         public string OutputPath => Path.Combine(ProjectPath, _activeConfiguration.Properties.Item("OutputPath").Value.ToString());
         public TargetRuntime TargetRuntime => TargetRuntime.NetFramework;
 
+        public string WorkingDirectory => OutputPath;
+
         public string GetOutputFilename()
         {
             string outputFileName = _project.Properties.Item("OutputFileName").Value.ToString();

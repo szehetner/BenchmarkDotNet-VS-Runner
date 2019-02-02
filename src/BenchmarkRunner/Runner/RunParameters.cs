@@ -7,6 +7,7 @@ namespace BenchmarkRunner.Runner
     {
         public TargetRuntime Runtime { get; set; }
         public string OutputPath { get; set; }
+        public string ProjectPath { get; set; }
         public string AssemblyPath { get; set; }
         public BenchmarkTreeNode SelectedNode { get; set; }
         public bool IsDryRun { get; set; }
@@ -28,8 +29,8 @@ namespace BenchmarkRunner.Runner
                 case ClassBenchmarkTreeNode c:
                     return $"--filter {c.FullName}.*";
 
-                case MethodBenchmarkTreeNode c:
-                    return $"--filter {c.FullName}";
+                case MethodBenchmarkTreeNode m:
+                    return $"--filter {m.FullName}";
 
                 default:
                     throw new ArgumentException();

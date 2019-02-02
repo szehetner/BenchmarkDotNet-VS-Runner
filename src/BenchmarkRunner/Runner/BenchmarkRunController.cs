@@ -28,15 +28,31 @@ namespace BenchmarkRunner.Runner
                 Arguments = BuildArguments(),
                 CreateNoWindow = false,
                 WindowStyle = ProcessWindowStyle.Normal,
-                WorkingDirectory = _parameters.OutputPath
+                WorkingDirectory = GetWorkingDirectory()
             };
             var process = Process.Start(startInfo);
             return Task.Run(() => process.WaitForExit());
         }
 
+        private string GetWorkingDirectory()
+        {
+            if (_parameters.Runtime == TargetRuntime.NetFramework)
+                return _parameters.OutputPath;
+
+            return _parameters.ProjectPath;
+        }
+
+        private string GetExecutable()
+        {
+            if (_parameters.Runtime == TargetRuntime.NetFramework)
+                return _parameters.AssemblyPath;
+
+            return "dotnet run -c Release";
+        }
+
         private string BuildArguments()
         {
-            string arguments = "/k " + _parameters.AssemblyPath;
+            string arguments = "/k " + GetExecutable();
 
             if (_parameters.IsDryRun)
                 arguments += " -j Dry";

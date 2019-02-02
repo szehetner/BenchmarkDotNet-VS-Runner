@@ -11,6 +11,7 @@ namespace BenchmarkRunner.ProjectSystem
         bool IsOptimized { get; }
         string ProjectPath { get; }
         string OutputPath { get; }
+        string WorkingDirectory { get; }
         string GetOutputFilename();
         TargetRuntime TargetRuntime { get; }
     }

@@ -47,6 +47,17 @@ namespace BenchmarkRunner.ProjectSystem
         public string ProjectPath => _project.Properties.Item("FullPath").Value.ToString();
         public string OutputPath => Path.Combine(ProjectPath, _outputPath);
 
+        public string WorkingDirectory
+        {
+            get
+            {
+                if (TargetRuntime == TargetRuntime.NetCore)
+                    return ProjectPath;
+
+                return OutputPath;
+            }
+        }
+
         public string GetOutputFilename()
         {
             string assemblyName = _assemblyName + ".dll";
