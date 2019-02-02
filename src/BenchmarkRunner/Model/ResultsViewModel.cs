@@ -14,21 +14,40 @@ namespace BenchmarkRunner.Model
     {
         private Benchmark _benchmark;
         private string _logFileContent;
+        private string _summary;
 
         public void SetSelectedBenchmark(Benchmark benchmark)
         {
             _benchmark = benchmark;
 
-            if (benchmark?.LastResult?.LogFileFullPath != null)
-                _logFileContent = File.ReadAllText(benchmark.LastResult.LogFileFullPath);
+            if (benchmark?.ArtifactsFolder != null)
+            {
+                string logfile = benchmark.GetLogFilename();
+                if (File.Exists(logfile))
+                {
+                    try
+                    {
+                        _logFileContent = File.ReadAllText(logfile);
+                        _summary = BenchmarkResultCollection.ReadSummary(logfile);
+                    }
+                    catch (Exception)
+                    {
+                        _logFileContent = null;
+                        _summary = null;
+                    }
+                }
+            }
             else
+            {
                 _logFileContent = null;
+                _summary = null;
+            }
 
             OnPropertyChanged(nameof(Summary));
             OnPropertyChanged(nameof(Log));
         }
-
-        public string Summary => _benchmark?.LastResult?.Summary;
+        
+        public string Summary => _summary;
         public string Log => _logFileContent;
 
         public event PropertyChangedEventHandler PropertyChanged;

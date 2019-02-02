@@ -73,8 +73,19 @@ namespace BenchmarkRunner.Model
                 MethodSymbol = methodSymbol,
                 ClassSymbol = methodSymbol.ContainingType,
                 Project = project,
-                LastResult = GetResult(project, methodSymbol)
+                LastResult = GetResult(project, methodSymbol),
+                ArtifactsFolder = GetArtifactsFolder(project)
             };
+        }
+
+        private string GetArtifactsFolder(Project project)
+        {
+            if (!_results.TryGetValue(project, out var resultTask))
+                return null;
+
+#pragma warning disable VSTHRD002 // Avoid problematic synchronous waits
+            return resultTask.Result.ArtifactsFolder;
+#pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
         }
 
         private BenchmarkResult GetResult(Project project, IMethodSymbol methodSymbol)

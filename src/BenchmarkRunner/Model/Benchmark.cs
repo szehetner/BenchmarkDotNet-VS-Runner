@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,5 +21,12 @@ namespace BenchmarkRunner.Model
         public Project Project { get; set; }
 
         public BenchmarkResult LastResult { get; set; }
+        public string ArtifactsFolder { get; set; }
+
+        public string GetLogFilename()
+        {
+            string filename = Namespace + "." + ClassName + ".log";
+            return Path.Combine(ArtifactsFolder, filename);
+        }
     }
 }
