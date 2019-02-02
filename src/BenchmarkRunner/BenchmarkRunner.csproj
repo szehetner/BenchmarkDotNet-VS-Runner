@@ -65,6 +65,9 @@
     </Compile>
     <Compile Include="Controls\Helper\AsyncDelegateCommand.cs" />
     <Compile Include="Controls\Helper\DelegateCommand.cs" />
+    <Compile Include="Controls\OptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ResultControl.xaml.cs">
       <DependentUpon>ResultControl.xaml</DependentUpon>
     </Compile>
@@ -77,6 +80,7 @@
     <Compile Include="Model\Discovery\WorkspaceBenchmarkDiscoverer.cs" />
     <Compile Include="Model\Grouping.cs" />
     <Compile Include="Model\BenchmarkResultCollection.cs" />
+    <Compile Include="Model\IOptionsProvider.cs" />
     <Compile Include="Model\ResultsViewModel.cs" />
     <Compile Include="Model\ToolWindowViewModel.cs" />
     <Compile Include="ProjectSystem\CommonProjectPropertyProvider.cs" />

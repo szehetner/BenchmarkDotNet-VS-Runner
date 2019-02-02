@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using BenchmarkRunner.Controls;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
@@ -38,6 +39,7 @@ namespace BenchmarkRunner
     [ProvideToolWindow(typeof(BenchmarkTreeWindow), Style = VsDockStyle.Tabbed, Window = "34E76E81-EE4A-11D0-AE2E-00A0C90FFFC3")]
     [Guid(BenchmarkTreeWindowPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+    [ProvideOptionPage(typeof(OptionsPage), "Benchmark Runner", "General", 0, 0, true)]
     public sealed class BenchmarkTreeWindowPackage : AsyncPackage
     {
         /// <summary>

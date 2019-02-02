@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BenchmarkRunner.Model;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,10 +12,12 @@ namespace BenchmarkRunner.Runner
     public class BenchmarkRunController
     {
         private readonly RunParameters _parameters;
+        private readonly IOptionsProvider _optionsProvider;
 
-        public BenchmarkRunController(RunParameters parameters)
+        public BenchmarkRunController(RunParameters parameters, IOptionsProvider optionsProvider)
         {
             _parameters = parameters;
+            _optionsProvider = optionsProvider;
         }
 
         public Task RunAsync()
@@ -39,6 +42,9 @@ namespace BenchmarkRunner.Runner
                 arguments += " -j Dry";
 
             arguments += " " + _parameters.BuildFilter();
+
+            if (!string.IsNullOrWhiteSpace(_optionsProvider.CommandlineParameters))
+                arguments += " " + _optionsProvider.CommandlineParameters;
 
             return arguments;
         }

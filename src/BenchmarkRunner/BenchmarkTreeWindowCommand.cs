@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using BenchmarkRunner.Model;
 using System.Runtime.InteropServices;
+using BenchmarkRunner.Controls;
 
 namespace BenchmarkRunner
 {
@@ -38,6 +39,7 @@ namespace BenchmarkRunner
         public const int cmdIdResultsHorizontal = 0x139;
         public const int cmdIdResultsNone = 0x140;
         public const int cmdIdOpenFolder = 0x141;
+        public const int cmdIdOptions = 0x142;
 
         public const int ToolbarID = 0x1000;
 
@@ -120,6 +122,8 @@ namespace BenchmarkRunner
 
             _openFolderCommand = new MenuCommand(new EventHandler(OpenReportFolder), new CommandID(CommandSet, cmdIdOpenFolder)) { Enabled = false };
             commandService.AddCommand(_openFolderCommand);
+
+            commandService.AddCommand(new MenuCommand(new EventHandler(OpenOptions), new CommandID(CommandSet, cmdIdOptions)));
         }
         
         private void OnResultOrientationQueryStatus(object sender, EventArgs e)
@@ -246,6 +250,13 @@ namespace BenchmarkRunner
         private async void OpenReportFolder(object sender, EventArgs e)
         {
             await _commandHandler.OpenReportFolderAsync();
+        }
+
+        private async void OpenOptions(object sender, EventArgs e)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            _package.ShowOptionPage(typeof(OptionsPage));
         }
 
         public void SetViewModel(ToolWindowViewModel viewModel)

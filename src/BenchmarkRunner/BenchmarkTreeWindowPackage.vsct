@@ -192,6 +192,15 @@
           <ButtonText>Open Report Folder</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdOpenOptions" priority="0x0116" type="Button">
+        <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupPositionID"/>
+        <Icon guid="guidImages" id="bmpPicOptions" />
+        <Strings>
+          <CommandName>cmdIdOpenOptions</CommandName>
+          <ButtonText>Options...</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
     
 
@@ -253,8 +262,9 @@
       <IDSymbol name="cmdIdResultsVertical" value="0x138" />
       <IDSymbol name="cmdIdResultsHorizontal" value="0x139" />
       <IDSymbol name="cmdIdResultsNone" value="0x140" />
-      
+
       <IDSymbol name="cmdIdOpenFolder" value="0x141" />
+      <IDSymbol name="cmdIdOpenOptions" value="0x142" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{b68bab6f-78bf-4c19-9504-5f433592139a}" >

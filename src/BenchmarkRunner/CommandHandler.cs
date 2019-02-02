@@ -11,6 +11,7 @@ using System.Threading;
 using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using BenchmarkRunner.Controls;
 
 namespace BenchmarkRunner
 {
@@ -69,13 +70,18 @@ namespace BenchmarkRunner
                     IsDryRun = isDryRun,
                     SelectedNode = selectedNode
                 };
-                BenchmarkRunController runController = new BenchmarkRunController(runParameters);
+                BenchmarkRunController runController = new BenchmarkRunController(runParameters, GetOptions());
                 await runController.RunAsync();
             }
             catch (Exception ex)
             {
                 await UIHelper.ShowErrorAsync(_package, ex.Message);
             }
+        }
+
+        private IOptionsProvider GetOptions()
+        {
+            return (OptionsPage)_package.GetDialogPage(typeof(OptionsPage));
         }
 
         internal async Task GoToCodeAsync(Project project, ISymbol targetSymbol)
