@@ -43,6 +43,15 @@ namespace BenchmarkRunner.Runner
 
             arguments += " " + _parameters.BuildFilter();
 
+            if (_optionsProvider.IsMemoryDiagnoserEnabled)
+                arguments += " -m";
+
+            if (_optionsProvider.IsDisassemblyDiagnoserEnabled)
+                arguments += " -d";
+
+            if (_optionsProvider.IsEtwProfilerEnabled)
+                arguments += " -p ETW";
+
             if (!string.IsNullOrWhiteSpace(_optionsProvider.CommandlineParameters))
                 arguments += " " + _optionsProvider.CommandlineParameters;
 

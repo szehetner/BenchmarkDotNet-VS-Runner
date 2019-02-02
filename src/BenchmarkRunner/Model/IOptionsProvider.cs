@@ -9,5 +9,8 @@ namespace BenchmarkRunner.Model
     public interface IOptionsProvider
     {
         string CommandlineParameters { get; }
+        bool IsMemoryDiagnoserEnabled { get; }
+        bool IsDisassemblyDiagnoserEnabled { get;  }
+        bool IsEtwProfilerEnabled { get; }
     }
 }
