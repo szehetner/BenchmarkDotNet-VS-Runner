@@ -27,28 +27,22 @@ namespace BenchmarkRunner.Model
                 {
                     try
                     {
-                        _logFileContent = File.ReadAllText(logfile);
-                        _summary = BenchmarkResultCollection.ReadSummary(logfile);
+                        Log = File.ReadAllText(logfile);
+                        Summary = BenchmarkResultCollection.ReadSummary(logfile);
+                        return;
                     }
                     catch (Exception)
                     {
-                        _logFileContent = null;
-                        _summary = null;
                     }
                 }
             }
-            else
-            {
-                _logFileContent = null;
-                _summary = null;
-            }
-
-            OnPropertyChanged(nameof(Summary));
-            OnPropertyChanged(nameof(Log));
+            
+            Log = null;
+            Summary = null;
         }
-        
-        public string Summary => _summary;
-        public string Log => _logFileContent;
+
+        public string Summary { get => _summary; set { _summary = value; OnPropertyChanged(); } }
+        public string Log { get => _logFileContent; set { _logFileContent = value; OnPropertyChanged(); } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

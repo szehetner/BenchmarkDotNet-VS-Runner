@@ -126,8 +126,8 @@ namespace BenchmarkRunner.Model
             {
                 TreeRow = 0;
                 TreeColumn = 0;
-                TreeColumnSpan = 1;
-                TreeRowSpan = 1;
+                TreeColumnSpan = 3;
+                TreeRowSpan = 3;
                 ResultsRow = 0;
                 ResultsColumn = 2;
                 ResultsColumnSpan = 1;
