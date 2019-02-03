@@ -16,6 +16,7 @@ using Microsoft.CodeAnalysis;
 using BenchmarkRunner.Model;
 using System.Runtime.InteropServices;
 using BenchmarkRunner.Controls;
+using EnvDTE;
 
 namespace BenchmarkRunner
 {
@@ -79,9 +80,8 @@ namespace BenchmarkRunner
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private BenchmarkTreeWindowCommand(AsyncPackage package, OleMenuCommandService commandService)
+        private BenchmarkTreeWindowCommand(AsyncPackage package, OleMenuCommandService commandService, DTE2 dte2)
         {
-            var dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
             _serviceProvider = new ServiceProvider(dte2 as Microsoft.VisualStudio.OLE.Interop.IServiceProvider);
 
             this._package = package ?? throw new ArgumentNullException(nameof(package));
@@ -296,12 +296,10 @@ namespace BenchmarkRunner
         /// <param name="package">Owner package, not null.</param>
         public static async Task InitializeAsync(AsyncPackage package)
         {
-            // Switch to the main thread - the call to AddCommand in BenchmarkTreeWindowCommand's constructor requires
-            // the UI thread.
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
+            var dte2 = await package.GetServiceAsync(typeof(DTE)) as DTE2;
+            OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 
-            OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-            Instance = new BenchmarkTreeWindowCommand(package, commandService);
+            Instance = new BenchmarkTreeWindowCommand(package, commandService, dte2);
 
             var container = await package.GetServiceAsync(typeof(Microsoft.VisualStudio.ComponentModelHost.SComponentModel)) as Microsoft.VisualStudio.ComponentModelHost.IComponentModel;
             container.DefaultCompositionService.SatisfyImportsOnce(Instance);
