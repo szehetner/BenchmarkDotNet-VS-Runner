@@ -315,6 +315,7 @@ namespace BenchmarkRunner
                 _rootViewModel.TreeViewModel.Nodes.Clear();
                 _rootViewModel.TreeViewModel.IsLoading = false;
                 _rootViewModel.TreeViewModel.IsEmpty = false;
+                _rootViewModel.ResultsViewModel.Reset();
             }
         }
 

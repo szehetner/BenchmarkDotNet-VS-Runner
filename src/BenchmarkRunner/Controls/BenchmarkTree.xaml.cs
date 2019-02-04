@@ -49,5 +49,15 @@ namespace BenchmarkRunner.Controls
 
             return source as TreeViewItem;
         }
+
+        private void TxtNodeName_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && e.ClickCount == 2)
+            {
+                var node = SelectedItem;
+                if (node != null)
+                    node.GoToCodeCommand.Execute(null);
+            }
+        }
     }
 }

@@ -73,7 +73,6 @@ namespace BenchmarkRunner.Model
                 MethodSymbol = methodSymbol,
                 ClassSymbol = methodSymbol.ContainingType,
                 Project = project,
-                LastResult = GetResult(project, methodSymbol),
                 ArtifactsFolder = GetArtifactsFolder(project)
             };
         }
@@ -84,7 +83,7 @@ namespace BenchmarkRunner.Model
                 return null;
 
 #pragma warning disable VSTHRD002 // Avoid problematic synchronous waits
-            return resultTask.Result.ArtifactsFolder;
+            return resultTask.Result?.ArtifactsFolder;
 #pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
         }
 

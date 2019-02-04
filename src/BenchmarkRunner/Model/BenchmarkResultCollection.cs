@@ -19,7 +19,9 @@ namespace BenchmarkRunner.Model
         public static async Task<BenchmarkResultCollection> CreateAsync(string projectName)
         {
             var propertyProvider = await CommandHandler.CreateProjectPropertyProviderAsync(projectName);
-            
+            if (propertyProvider == null)
+                return null;
+
             return await Task.Run(() => new BenchmarkResultCollection(propertyProvider.WorkingDirectory));
         }
 

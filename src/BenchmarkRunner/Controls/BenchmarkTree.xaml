@@ -138,7 +138,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type model:ClassBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal" Margin="0,1">
                         <Image Source="/BenchmarkRunner;component/Resources/Class.png" />
-                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" MouseDown="TxtNodeName_MouseDown">
                             <TextBlock.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
@@ -162,7 +162,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type model:MethodBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal" Margin="0,1">
                         <Image Source="/BenchmarkRunner;component/Resources/Method.png" />
-                        <TextBlock x:Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                            <TextBlock x:Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" MouseDown="TxtNodeName_MouseDown" >
                             <TextBlock.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>

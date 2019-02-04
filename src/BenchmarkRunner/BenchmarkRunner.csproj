@@ -82,6 +82,7 @@
     <Compile Include="Model\BenchmarkResultCollection.cs" />
     <Compile Include="Model\IOptionsProvider.cs" />
     <Compile Include="Model\ResultsViewModel.cs" />
+    <Compile Include="Model\ResultWatcher.cs" />
     <Compile Include="Model\ToolWindowViewModel.cs" />
     <Compile Include="ProjectSystem\CommonProjectPropertyProvider.cs" />
     <Compile Include="ProjectSystem\IProjectPropertyProvider.cs" />
@@ -100,11 +101,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LargeIcon.png" />
     <Content Include="Resources\Columns.png" />
     <Resource Include="Resources\FolderOpen.png" />
     <Content Include="Resources\NoResults.png" />
     <Content Include="Resources\Rows.png" />
     <Resource Include="Resources\TextFile.png" />
+    <Content Include="Sample.png" />
     <Content Include="System.Threading.Tasks.Dataflow.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

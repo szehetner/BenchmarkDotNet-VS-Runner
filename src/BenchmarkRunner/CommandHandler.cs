@@ -127,7 +127,7 @@ namespace BenchmarkRunner
                 if (project.Name == name)
                     return project;
             }
-            throw new Exception("Unexpected Project: " + name);
+            return null;
         }
     }
 }
