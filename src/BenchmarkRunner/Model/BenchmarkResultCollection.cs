@@ -28,6 +28,9 @@ namespace BenchmarkRunner.Model
         public static async Task<string> GetReportFolderAsync(string projectName)
         {
             var propertyProvider = await CommandHandler.CreateProjectPropertyProviderAsync(projectName);
+            if (propertyProvider == null)
+                return null;
+
             return Path.Combine(propertyProvider.WorkingDirectory, ARTIFACTS_FOLDER);
         }
 

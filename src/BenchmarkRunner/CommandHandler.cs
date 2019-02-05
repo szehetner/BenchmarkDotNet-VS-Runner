@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using BenchmarkRunner.Controls;
+using System.IO;
 
 namespace BenchmarkRunner
 {
@@ -99,13 +100,23 @@ namespace BenchmarkRunner
 
         public async Task OpenReportFolderAsync()
         {
-            var toolWindow = (BenchmarkTreeWindow)_package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, false);
-            BenchmarkTreeNode selectedNode = toolWindow.SelectedItem;
-            if (selectedNode == null)
-                return;
+            try
+            {
+                var toolWindow = (BenchmarkTreeWindow)_package.FindToolWindow(typeof(BenchmarkTreeWindow), 0, false);
+                BenchmarkTreeNode selectedNode = toolWindow.SelectedItem;
+                if (selectedNode == null)
+                    return;
             
-            string reportFolder = await BenchmarkResultCollection.GetReportFolderAsync(selectedNode.ProjectName);
-            Process.Start(reportFolder);
+                string reportFolder = await BenchmarkResultCollection.GetReportFolderAsync(selectedNode.ProjectName);
+                if (!Directory.Exists(reportFolder))
+                    return;
+
+                Process.Start(reportFolder);
+            }
+            catch (Exception ex)
+            {
+                await UIHelper.ShowErrorAsync(_package, ex.Message);
+            }
         }
         
         public static async Task<IProjectPropertyProvider> CreateProjectPropertyProviderAsync(string projectName)
