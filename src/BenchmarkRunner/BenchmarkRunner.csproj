@@ -101,13 +101,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LargeIcon.png" />
+    <Content Include="LargeIcon.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Columns.png" />
     <Resource Include="Resources\FolderOpen.png" />
     <Content Include="Resources\NoResults.png" />
     <Content Include="Resources\Rows.png" />
     <Resource Include="Resources\TextFile.png" />
-    <Content Include="Sample.png" />
+    <Content Include="Sample.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="System.Threading.Tasks.Dataflow.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
