@@ -10,7 +10,10 @@ namespace BenchmarkRunner.ProjectSystem
             if (IsNewProjectFormat(project))
                 return new CommonProjectPropertyProvider(project);
 
-            return new LegacyProjectPropertyProvider(project);
+            if (project.ConfigurationManager?.ActiveConfiguration != null)
+                return new LegacyProjectPropertyProvider(project);
+
+            return null;
         }
 
         private static bool IsNewProjectFormat(Project vsProject)

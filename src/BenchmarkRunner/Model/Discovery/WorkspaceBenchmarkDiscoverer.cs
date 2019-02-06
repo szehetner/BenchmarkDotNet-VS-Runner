@@ -26,6 +26,9 @@ namespace BenchmarkRunner.Model
             _projects = new List<Tuple<Project, Compilation>>();
             foreach (var project in _workspace.CurrentSolution.Projects)
             {
+                if (project.CompilationOptions.OutputKind != OutputKind.ConsoleApplication)
+                    continue;
+
                 _results.Add(project, BenchmarkResultCollection.CreateAsync(project.Name));
 
                 _projects.Add(Tuple.Create(project, await project.GetCompilationAsync()));

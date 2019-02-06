@@ -127,6 +127,9 @@ namespace BenchmarkRunner
                 return null;
 
             var propertyProvider = ProjectPropertyProviderFactory.Create(project);
+            if (propertyProvider == null)
+                return null;
+
             await propertyProvider.LoadPropertiesAsync();
             return propertyProvider;
         }
