@@ -5,6 +5,9 @@ It provides a Tool Window that displays all benchmarks in the current solution. 
 
 ![Benchmark Runner Window](https://github.com/szehetner/BenchmarkDotNet-VS-Runner/raw/master/src/BenchmarkRunner/Sample.png)
 
+## Installation
+
+Download it from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=StephanZehetner.BenchmarkRunner).
 
 ## Requirements
 When running a benchmark, the Benchmark Runner builds and runs the benchmark project, passing the right command line parameters. Therefore it is necessary that the **Benchmark 
