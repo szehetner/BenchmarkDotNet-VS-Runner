@@ -32,26 +32,35 @@ namespace BenchmarkRunner.Model
 
         public void RefreshResults()
         {
-            if (_benchmark?.ArtifactsFolder != null)
+            if (_benchmark?.ArtifactsFolder == null)
             {
-                string logfile = _benchmark.GetLogFilename();
-                _resultWatcher.StartWatching(logfile);
-                if (File.Exists(logfile))
+                Log = null;
+                Summary = null;
+                return;
+            }
+            
+            ReadFileContent(_benchmark.GetLogFilename(), c => Log = c);
+            ReadFileContent(_benchmark.GetSummaryFilename(), c => Summary = c);
+        }
+
+        private void ReadFileContent(string fileName, Action<string> setter)
+        {
+            _resultWatcher.StartWatching(fileName);
+            if (File.Exists(fileName))
+            {
+                try
                 {
-                    try
-                    {
-                        Log = File.ReadAllText(logfile);
-                        Summary = BenchmarkResultCollection.ReadSummary(logfile);
-                        return;
-                    }
-                    catch (Exception)
-                    {
-                    }
+                    setter(File.ReadAllText(fileName));
+                }
+                catch (Exception)
+                {
+                    setter(null);
                 }
             }
-
-            Log = null;
-            Summary = null;
+            else
+            {
+                setter(null);
+            }
         }
 
         public string Summary { get => _summary; set { _summary = value; OnPropertyChanged(); } }

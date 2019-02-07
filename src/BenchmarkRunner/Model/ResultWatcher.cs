@@ -28,7 +28,7 @@ namespace BenchmarkRunner.Model
             if (_watchers.ContainsKey(logPath))
                 return;
 
-            var watcher = new FileSystemWatcher(logPath, "*.log");
+            var watcher = new FileSystemWatcher(logPath);
             watcher.Changed += Watcher_Changed;
             watcher.Created += Watcher_Changed;
             watcher.EnableRaisingEvents = true;

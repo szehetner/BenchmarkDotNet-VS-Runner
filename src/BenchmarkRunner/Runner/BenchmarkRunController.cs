@@ -71,6 +71,15 @@ namespace BenchmarkRunner.Runner
             if (!string.IsNullOrWhiteSpace(_optionsProvider.CommandlineParameters))
                 arguments += " " + _optionsProvider.CommandlineParameters;
 
+            if (!arguments.Contains(" -e "))
+            {
+                arguments += " -e markdown"; // always included for summary tab
+            }
+            else
+            {
+                if (!arguments.Contains("markdown"))
+                    arguments = arguments.Replace(" -e ", " -e markdown ");
+            }
             return arguments;
         }
     }

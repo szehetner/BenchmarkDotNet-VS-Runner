@@ -24,5 +24,11 @@ namespace BenchmarkRunner.Model
             string filename = Namespace + "." + ClassName + ".log";
             return Path.Combine(ArtifactsFolder, filename);
         }
+
+        public string GetSummaryFilename()
+        {
+            string filename = Namespace + "." + ClassName + "-report-default.md";
+            return Path.Combine(ArtifactsFolder, BenchmarkResultCollection.RESULTS_FOLDER, filename);
+        }
     }
 }

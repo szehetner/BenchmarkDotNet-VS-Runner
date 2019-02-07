@@ -31,7 +31,7 @@ namespace BenchmarkRunner.Model
             if (propertyProvider == null)
                 return null;
 
-            return Path.Combine(propertyProvider.WorkingDirectory, ARTIFACTS_FOLDER);
+            return Path.Combine(propertyProvider.WorkingDirectory, ARTIFACTS_FOLDER, RESULTS_FOLDER);
         }
 
         public BenchmarkResultCollection(string outputDirectory)
