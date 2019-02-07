@@ -40,5 +40,5 @@ It will **not** work if you explicitly start a Benchmark in the Main method, e.g
 
 ## Limitations / Known Issues:
 * If you add/remove/rename benchmark classes/methods in the code, the changes won't be visible in the tree view immediately. You need to click "Refresh" to update the tree.
-* If benchmarks of more than one class are run together, the results won't show up in the results section.
+* If benchmarks of more than one class are run together, the logfile content won't show up in the log tab.
 * You can only select one node in the tree view at once
