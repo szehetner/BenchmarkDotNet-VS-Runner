@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vs_shell="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
              xmlns:local="clr-namespace:BenchmarkRunner.Controls"
              xmlns:model="clr-namespace:BenchmarkRunner.Model"
              mc:Ignorable="d" 
@@ -41,7 +42,12 @@
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibility2"/>
         </Grid.Resources>
-            <TreeView Grid.Row="0" Grid.Column="0" Name="trvBenchmarks" ItemsSource="{Binding Nodes}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" PreviewMouseRightButtonDown="TrvBenchmarks_PreviewMouseRightButtonDown" PreviewMouseWheel="TrvBenchmarks_PreviewMouseWheel">
+            <TreeView Grid.Row="0" Grid.Column="0" Name="trvBenchmarks" ItemsSource="{Binding Nodes}" 
+                      BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                      PreviewMouseRightButtonDown="TrvBenchmarks_PreviewMouseRightButtonDown" 
+                      PreviewMouseWheel="TrvBenchmarks_PreviewMouseWheel"
+                      Background="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowBackgroundBrushKey}}">
             <TreeView.Resources>
                 <ContextMenu x:Key="NodeContextMenu">
                     <MenuItem Name="Run" Header="Run" Command="{Binding RunSelectedCommand}">
@@ -49,7 +55,7 @@
                             <Image Source="/BenchmarkRunner;component/Resources/Run.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Name="RunDry" Header="Run Once (Dry Run)" Command="{Binding DryRunSelectedCommand}">
+                        <MenuItem Name="RunDry" Header="Run Once (Dry Run)" Command="{Binding DryRunSelectedCommand}">
                         <MenuItem.Icon>
                             <Image Source="/BenchmarkRunner;component/Resources/RunChecked.png"/>
                         </MenuItem.Icon>
@@ -63,9 +69,10 @@
                 </ContextMenu>
                 <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
                 <HierarchicalDataTemplate DataType="{x:Type model:ProjectBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <StackPanel Orientation="Horizontal" Margin="0,1" Background="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowBackgroundBrushKey}}">
                         <Image Source="/BenchmarkRunner;component/Resources/Project.png" />
-                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" 
+                                   Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}">
                             <TextBlock.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
@@ -77,20 +84,21 @@
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
                                             </MultiDataTrigger.Conditions>
-                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
-                                        </MultiDataTrigger>
+                                                <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                            </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Resources>
                         </TextBlock>
-                        <TextBlock Text="{Binding NodeCountText}" Margin="3,0,0,0" Foreground="#FF595959" />
-                        <TextBlock Text="loading..." Margin="3,0,0,0" Foreground="#FF595959" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}, FallbackValue=Hidden}" />
+                            <TextBlock Text="{Binding NodeCountText}" Margin="3,2,0,0" Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}" />
+                            <TextBlock Text="loading..." Margin="3,0,0,0" Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}, FallbackValue=Hidden}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type model:NamespaceBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <StackPanel Orientation="Horizontal" Margin="0,1" Background="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowBackgroundBrushKey}}">
                         <Image Source="/BenchmarkRunner;component/Resources/Namespace.png" />
-                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" 
+                                   Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}">
                             <TextBlock.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
@@ -102,19 +110,20 @@
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
                                             </MultiDataTrigger.Conditions>
-                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
-                                        </MultiDataTrigger>
+                                                <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                            </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Resources>
                         </TextBlock>
-                        <TextBlock Text="{Binding NodeCountText}" Margin="3,0,0,0" Foreground="#FF595959" />
-                    </StackPanel>
+                            <TextBlock Text="{Binding NodeCountText}" Margin="3,2,0,0" Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}" />
+                        </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type model:CategoryBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <StackPanel Orientation="Horizontal" Margin="0,1" Background="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowBackgroundBrushKey}}">
                         <Image Source="/BenchmarkRunner;component/Resources/Category.png" />
-                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" >
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" 
+                                   Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}">
                             <TextBlock.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
@@ -126,19 +135,20 @@
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
                                             </MultiDataTrigger.Conditions>
-                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
-                                        </MultiDataTrigger>
+                                                <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                            </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Resources>
                         </TextBlock>
-                        <TextBlock Text="{Binding NodeCountText}" Margin="3,0,0,0" Foreground="#FF595959" />
-                    </StackPanel>
+                            <TextBlock Text="{Binding NodeCountText}" Margin="3,2,0,0" Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}" />
+                        </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type model:ClassBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <StackPanel Orientation="Horizontal" Margin="0" Background="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowBackgroundBrushKey}}">
                         <Image Source="/BenchmarkRunner;component/Resources/Class.png" />
-                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" MouseDown="TxtNodeName_MouseDown">
+                        <TextBlock Name="txtNodeName" Text="{Binding NodeName}" Margin="1,1,0,0" Padding="2,1,2,1" MouseDown="TxtNodeName_MouseDown"
+                                   Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}">
                             <TextBlock.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
@@ -150,19 +160,20 @@
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
                                             </MultiDataTrigger.Conditions>
-                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
-                                        </MultiDataTrigger>
+                                                <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                            </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Resources>
                         </TextBlock>
-                        <TextBlock Text="{Binding NodeCountText}" Margin="3,0,0,0" Foreground="#FF595959" />
+                            <TextBlock Text="{Binding NodeCountText}" Margin="3,2,0,0" Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type model:MethodBenchmarkTreeNode}" ItemsSource="{Binding Nodes}">
-                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                        <StackPanel Orientation="Horizontal" Margin="0" Background="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowBackgroundBrushKey}}">
                         <Image Source="/BenchmarkRunner;component/Resources/Method.png" />
-                            <TextBlock x:Name="txtNodeName" Text="{Binding NodeName}" Margin="1,0,0,0" Padding="2,1,2,1" MouseDown="TxtNodeName_MouseDown" >
+                            <TextBlock x:Name="txtNodeName" Text="{Binding NodeName}" Margin="1,1,0,0" Padding="2,1,2,1" MouseDown="TxtNodeName_MouseDown" 
+                                       Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowTextBrushKey}}">
                             <TextBlock.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
@@ -174,7 +185,7 @@
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True" />
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelectionActive}" Value="False" />
                                             </MultiDataTrigger.Conditions>
-                                            <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
+                                                <Setter Property="Background" Value="{DynamicResource _CustomHighlightBrushKey}" />
                                         </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -182,10 +193,10 @@
                         </TextBlock>
                     </StackPanel>
                 </HierarchicalDataTemplate>
-                <SolidColorBrush x:Key="_CustomHighlightBrushKey" Color="{Binding Source={StaticResource {x:Static SystemColors.HighlightBrushKey}}, Path=Color}" />
-                <SolidColorBrush x:Key="_CustomControlBrushKey" Color="{Binding Source={StaticResource {x:Static SystemColors.ControlBrushKey}}, Path=Color}" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                    <SolidColorBrush x:Key="_CustomHighlightBrushKey" Color="{DynamicResource {x:Static vs_shell:EnvironmentColors.ComboBoxSelectionColorKey}}" />
+                    <SolidColorBrush x:Key="_CustomControlBrushKey" Color="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowBackgroundColorKey}}" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
                 
             </TreeView.Resources>
             <TreeView.ItemContainerStyle>
@@ -193,10 +204,12 @@
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                     <Setter Property="ContextMenu" Value="{StaticResource NodeContextMenu}"/>
-                </Style>
+                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+                        <Setter Property="Background" Value="{DynamicResource {x:Static vs_shell:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+                    </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="loading..." Foreground="#FF595959" Margin="3,0,0,0" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility2}, FallbackValue=Hidden}" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="loading..." Foreground="{DynamicResource {x:Static vs_shell:EnvironmentColors.ComboBoxItemTextInactiveBrushKey}}"  Margin="3,0,0,0" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility2}, FallbackValue=Hidden}" />
         <TextBlock Grid.Row="2" Grid.Column="0" Text="No Benchmarks found in current Solution." Margin="3,0,0,0" Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibility2}, FallbackValue=Hidden}" />
     </Grid>
     </DockPanel>

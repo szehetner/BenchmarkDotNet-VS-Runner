@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:vs_shell="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
@@ -30,10 +31,12 @@
         </ScrollViewer>
         
         <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="{Binding VerticalRowSpan}" HorizontalAlignment="Stretch" 
-                      ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Visibility="{Binding VerticalSplitterVisibility}" />
+                      ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Visibility="{Binding VerticalSplitterVisibility}" 
+                      Background="{DynamicResource {x:Static vs_shell:EnvironmentColors.CommandBarMenuSeparatorBrushKey}}" />
         
         <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="{Binding HorizontalColumnSpan}"  HorizontalAlignment="Stretch" ResizeDirection="Rows" 
-                      ResizeBehavior="PreviousAndNext" Visibility="{Binding HorizontalSplitterVisibility}" />
+                      ResizeBehavior="PreviousAndNext" Visibility="{Binding HorizontalSplitterVisibility}" 
+                      Background="{DynamicResource {x:Static vs_shell:EnvironmentColors.CommandBarMenuSeparatorBrushKey}}"/>
 
         <Controls:ResultControl x:Name="ResultControl" DataContext="{Binding ResultsViewModel}" 
                                 Grid.Column="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.ResultsColumn}" 
