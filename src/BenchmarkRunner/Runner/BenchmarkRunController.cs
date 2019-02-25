@@ -57,6 +57,9 @@ namespace BenchmarkRunner.Runner
             if (_parameters.IsDryRun)
                 arguments += " -j Dry";
 
+            if (IsMultiTargetProject())
+                arguments += " --framework " + GetProjectTargetFramework();
+
             arguments += " " + _parameters.BuildFilter();
 
             if (_optionsProvider.IsMemoryDiagnoserEnabled)
@@ -82,5 +85,18 @@ namespace BenchmarkRunner.Runner
             }
             return arguments;
         }
+
+        private bool IsMultiTargetProject()
+        {
+            return _parameters.SelectedNode.ProjectName.IndexOf('(') != -1;
+        }
+
+        private string GetProjectTargetFramework()
+        {
+            string projectName = _parameters.SelectedNode.ProjectName;
+            int startIndex = projectName.IndexOf('(');
+            return projectName.Substring(startIndex + 1, projectName.Length - startIndex - 2);
+        }
+
     }
 }

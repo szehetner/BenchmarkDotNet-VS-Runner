@@ -25,15 +25,24 @@ namespace BenchmarkRunner.Model
 
         public void TryCreateWatcher(string logPath)
         {
-            if (_watchers.ContainsKey(logPath))
+            if (_watchers.ContainsKey(logPath) || !Directory.Exists(logPath))
                 return;
 
-            var watcher = new FileSystemWatcher(logPath);
-            watcher.Changed += Watcher_Changed;
-            watcher.Created += Watcher_Changed;
-            watcher.EnableRaisingEvents = true;
+            FileSystemWatcher watcher = null;
+            try
+            {
+                watcher = new FileSystemWatcher(logPath);
+                watcher.Changed += Watcher_Changed;
+                watcher.Created += Watcher_Changed;
+                watcher.EnableRaisingEvents = true;
 
-            _watchers.Add(logPath, watcher);
+                _watchers.Add(logPath, watcher);
+            }
+            catch(Exception)
+            {
+                if (watcher != null)
+                    watcher.Dispose();
+            }
         }
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)

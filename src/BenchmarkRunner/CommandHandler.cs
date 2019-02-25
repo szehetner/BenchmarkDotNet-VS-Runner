@@ -136,9 +136,14 @@ namespace BenchmarkRunner
 
         private static EnvDTE.Project GetProject(DTE2 dte2, string name)
         {
+            string baseName = name;
+            var parenthesisIndex = name.IndexOf('(');
+            if (parenthesisIndex != -1)
+                baseName = name.Substring(0, parenthesisIndex);
+
             foreach (EnvDTE.Project project in dte2.Solution.Projects)
             {
-                if (project.Name == name)
+                if (project.Name == baseName)
                     return project;
             }
             return null;
