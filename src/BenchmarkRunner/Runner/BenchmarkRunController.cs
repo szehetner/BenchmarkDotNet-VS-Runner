@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BenchmarkRunner.Runner
 {
@@ -34,6 +35,12 @@ namespace BenchmarkRunner.Runner
             return Task.Run(() => process.WaitForExit());
         }
 
+        public void CopyCommandlineToClipboard()
+        {
+            string commandline = BuildArguments();
+            Clipboard.SetText(commandline);
+        }
+
         private string GetWorkingDirectory()
         {
             if (_parameters.Runtime == TargetRuntime.NetFramework)
@@ -50,9 +57,14 @@ namespace BenchmarkRunner.Runner
             return "dotnet run -c Release";
         }
 
-        private string BuildArguments()
+        private string BuildCmdArguments()
         {
-            string arguments = "/k " + GetExecutable();
+            return "/k " + BuildArguments();
+        }
+
+        public string BuildArguments()
+        {
+            string arguments = GetExecutable();
 
             if (_parameters.IsDryRun)
                 arguments += " -j Dry";

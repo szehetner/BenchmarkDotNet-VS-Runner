@@ -152,7 +152,20 @@
         </Strings>
       </Button>
 
-      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdResultsNone" priority="0x0112" type="Button">
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdCopyToClipboard" priority="0x0112" type="Button">
+        <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ToolbarRunGroupID"/>
+        <Icon guid="guidCopyToClipboard" id="bmpPicCopyToClipboard" />
+        <CommandFlag>DontCache</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdIdCopyToClipboard</CommandName>
+          <ButtonText>Copy Command Line to Clipboard</ButtonText>
+        </Strings>
+      </Button>
+
+      
+
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdResultsNone" priority="0x0113" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupID"/>
         <Icon guid="guidRowNoResults" id="bmpPicNoResults" />
         <CommandFlag>IconAndText</CommandFlag>
@@ -162,7 +175,7 @@
         </Strings>
       </Button>
 
-      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdResultsVertical" priority="0x0113" type="Button">
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdResultsVertical" priority="0x0114" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupID"/>
         <Icon guid="guidColumnImages" id="bmpPicColumns" />
         <CommandFlag>IconAndText</CommandFlag>
@@ -172,7 +185,7 @@
         </Strings>
       </Button>
 
-      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdResultsHorizontal" priority="0x0114" type="Button">
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdResultsHorizontal" priority="0x0115" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupID"/>
         <Icon guid="guidRowImages" id="bmpPicRows" />
         <CommandFlag>IconAndText</CommandFlag>
@@ -182,7 +195,7 @@
         </Strings>
       </Button>
 
-      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdOpenFolder" priority="0x0115" type="Button">
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdOpenFolder" priority="0x0116" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupPositionID"/>
         <Icon guid="guidFolderOpen" id="bmpPicFolderOpen" />
         <CommandFlag>DontCache</CommandFlag>
@@ -193,7 +206,7 @@
         </Strings>
       </Button>
 
-      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdOpenOptions" priority="0x0116" type="Button">
+      <Button guid="guidBenchmarkTreeWindowPackageCmdSet" id="cmdIdOpenOptions" priority="0x0117" type="Button">
         <Parent guid="guidBenchmarkTreeWindowPackageCmdSet" id="ResultOrientationGroupPositionID"/>
         <Icon guid="guidImages" id="bmpPicOptions" />
         <Strings>
@@ -228,6 +241,7 @@
       <Bitmap guid="guidRowImages" href="Resources\Rows.png" usedList="bmpPicRows"/>
       <Bitmap guid="guidRowNoResults" href="Resources\NoResults.png" usedList="bmpPicNoResults"/>
       <Bitmap guid="guidFolderOpen" href="Resources\FolderOpen.png" usedList="bmpPicFolderOpen"/>
+      <Bitmap guid="guidCopyToClipboard" href="Resources\CopyToClipboard.png" usedList="bmpPicCopyToClipboard"/>
     </Bitmaps>
   </Commands>
 
@@ -265,6 +279,8 @@
 
       <IDSymbol name="cmdIdOpenFolder" value="0x141" />
       <IDSymbol name="cmdIdOpenOptions" value="0x142" />
+      
+      <IDSymbol name="cmdIdCopyToClipboard" value="0x143" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{b68bab6f-78bf-4c19-9504-5f433592139a}" >
@@ -292,6 +308,10 @@
 
     <GuidSymbol name="guidFolderOpen" value="{8EA28C9C-268C-4F79-8B72-B264E9D2AC34}" >
       <IDSymbol name="bmpPicFolderOpen" value="1" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidCopyToClipboard" value="{B3C48BF2-518F-4205-94B1-86B3FB9E4344}" >
+      <IDSymbol name="bmpPicCopyToClipboard" value="1" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

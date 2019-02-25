@@ -41,6 +41,7 @@ namespace BenchmarkRunner
         public const int cmdIdResultsNone = 0x140;
         public const int cmdIdOpenFolder = 0x141;
         public const int cmdIdOptions = 0x142;
+        public const int cmdIdCopyToClipboard = 0x143;
 
         public const int ToolbarID = 0x1000;
 
@@ -67,6 +68,7 @@ namespace BenchmarkRunner
 
         private MenuCommand _runCommand;
         private MenuCommand _runDryCommand;
+        private MenuCommand _copyToClipboardCommand;
         private MenuCommand _expandAllCommand;
         private MenuCommand _collapseAllCommand;
         private MenuCommand _groupByCommand;
@@ -96,6 +98,9 @@ namespace BenchmarkRunner
 
             _runDryCommand = new MenuCommand(new EventHandler(RunDry), new CommandID(CommandSet, cmdIdRunDry)) { Enabled = false };
             commandService.AddCommand(_runDryCommand);
+
+            _copyToClipboardCommand = new MenuCommand(new EventHandler(CopyCommandlineToClipboard), new CommandID(CommandSet, cmdIdCopyToClipboard)) { Enabled = false };
+            commandService.AddCommand(_copyToClipboardCommand);
 
             _expandAllCommand = new MenuCommand(new EventHandler(ExpandAll), new CommandID(CommandSet, cmdIdExpandAll)) { Enabled = false };
             commandService.AddCommand(_expandAllCommand);
@@ -219,6 +224,7 @@ namespace BenchmarkRunner
 
                 _runCommand.Enabled = _rootViewModel.TreeViewModel.IsFinished;
                 _runDryCommand.Enabled = _rootViewModel.TreeViewModel.IsFinished;
+                _copyToClipboardCommand.Enabled = _rootViewModel.TreeViewModel.IsFinished;
                 _groupByCommand.Enabled = _rootViewModel.TreeViewModel.IsFinished;
             }
             catch (Exception ex)
@@ -245,6 +251,11 @@ namespace BenchmarkRunner
         private async void RunDry(object sender, EventArgs arguments)
         {
             await _commandHandler.RunAsync(true);
+        }
+
+        private async void CopyCommandlineToClipboard(object sender, EventArgs arguments)
+        {
+            await _commandHandler.CopyCommandlineToClipboardAsync();
         }
 
         private async void OpenReportFolder(object sender, EventArgs e)

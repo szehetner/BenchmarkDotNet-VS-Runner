@@ -106,6 +106,7 @@
     </Content>
     <Content Include="Resources\Columns.png" />
     <Resource Include="Resources\FolderOpen.png" />
+    <Resource Include="Resources\CopyToClipboard.png" />
     <Content Include="Resources\NoResults.png" />
     <Content Include="Resources\Rows.png" />
     <Resource Include="Resources\TextFile.png" />
