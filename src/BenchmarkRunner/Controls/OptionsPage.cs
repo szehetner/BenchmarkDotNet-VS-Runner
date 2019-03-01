@@ -6,29 +6,48 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BenchmarkRunner.Controls
 {
     public class OptionsPage : DialogPage, IOptionsProvider
     {
-        [Category("General")]
-        [DisplayName("Command Line Parameters")]
-        [Description("Additional command line parameters to pass to BenchmarkDotnet.")]
         public string CommandlineParameters { get; set; }
 
-        [Category("Diagnosers")]
-        [DisplayName("Enable Memory Diagnoser")]
-        [Description("Enables the MemoryDiagnoser and prints memory statistics.")]
         public bool IsMemoryDiagnoserEnabled { get; set; }
-
-        [Category("Diagnosers")]
-        [DisplayName("Enable Disassembly Diagnoser")]
-        [Description("Enables the DisassemblyDiagnoser and exports disassembly of benchmarked code.")]
         public bool IsDisassemblyDiagnoserEnabled { get; set; }
-
-        [Category("Profiler")]
-        [DisplayName("Enable ETW Profiler")]
-        [Description("Enables the DisassemblyDiagnoser and exports disassembly of benchmarked code.")]
         public bool IsEtwProfilerEnabled { get; set; }
+
+        public bool RuntimeClrEnabled { get; set; }
+        public bool RuntimeCoreEnabled { get; set; }
+        public bool RuntimeMonoEnabled { get; set; }
+        public bool RuntimeCoreRTEnabled { get; set; }
+
+        public bool ExporterCsvEnabled { get; set; }
+        public bool ExporterCsvMeasurementsEnabled { get; set; }
+        public bool ExporterHtmlEnabled { get; set; }
+        public bool ExporterMarkdownAtlassianEnabled { get; set; }
+        public bool ExporterMarkdownStackOverflowEnabled { get; set; }
+        public bool ExporterMarkdownGitHubEnabled { get; set; }
+        public bool ExporterPlainEnabled { get; set; }
+        public bool ExporterRPlotEnabled { get; set; }
+        public bool ExporterJsonDefaultEnabled { get; set; }
+        public bool ExporterJsonBriefEnabled { get; set; }
+        public bool ExporterJsonFullEnabled { get; set; }
+        public bool ExporterAsciiDocEnabled { get; set; }
+        public bool ExporterXmlDefaultEnabled { get; set; }
+        public bool ExporterXmlBriefEnabled { get; set; }
+        public bool ExporterXmlFullEnabled { get; set; }
+
+        protected override IWin32Window Window
+        {
+            get
+            {
+                OptionsControl control = new OptionsControl();
+                control.OptionsPage = this;
+                control.Initialize();
+                return control;
+            }
+        }
     }
 }

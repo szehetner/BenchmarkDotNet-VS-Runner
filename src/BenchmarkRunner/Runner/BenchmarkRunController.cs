@@ -26,7 +26,7 @@ namespace BenchmarkRunner.Runner
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
-                Arguments = BuildArguments(),
+                Arguments = BuildCmdArguments(),
                 CreateNoWindow = false,
                 WindowStyle = ProcessWindowStyle.Normal,
                 WorkingDirectory = GetWorkingDirectory()
@@ -64,38 +64,114 @@ namespace BenchmarkRunner.Runner
 
         public string BuildArguments()
         {
-            string arguments = GetExecutable();
+            StringBuilder arguments = new StringBuilder();
+            arguments.Append(GetExecutable());
 
             if (_parameters.IsDryRun)
-                arguments += " -j Dry";
+                arguments.Append(" -j Dry");
 
             if (IsMultiTargetProject())
-                arguments += " --framework " + GetProjectTargetFramework();
+            {
+                arguments.Append(" --framework ");
+                arguments.Append(GetProjectTargetFramework());
+            }
 
-            arguments += " " + _parameters.BuildFilter();
+            arguments.Append(" " + _parameters.BuildFilter());
 
-            if (_optionsProvider.IsMemoryDiagnoserEnabled)
-                arguments += " -m";
-
-            if (_optionsProvider.IsDisassemblyDiagnoserEnabled)
-                arguments += " -d";
-
-            if (_optionsProvider.IsEtwProfilerEnabled)
-                arguments += " -p ETW";
+            AddRuntimeArguments(arguments);
+            AddDiagnoserArguments(arguments);
+            AddExporterArguments(arguments);
 
             if (!string.IsNullOrWhiteSpace(_optionsProvider.CommandlineParameters))
-                arguments += " " + _optionsProvider.CommandlineParameters;
+            {
+                arguments.Append(" ");
+                arguments.Append(_optionsProvider.CommandlineParameters);
+            }
 
-            if (!arguments.Contains(" -e "))
-            {
-                arguments += " -e markdown"; // always included for summary tab
-            }
-            else
-            {
-                if (!arguments.Contains("markdown"))
-                    arguments = arguments.Replace(" -e ", " -e markdown ");
-            }
-            return arguments;
+            return arguments.ToString();
+        }
+
+        private void AddRuntimeArguments(StringBuilder builder)
+        {
+            if (!_optionsProvider.RuntimeClrEnabled
+                && !_optionsProvider.RuntimeCoreEnabled
+                && !_optionsProvider.RuntimeMonoEnabled
+                && !_optionsProvider.RuntimeCoreRTEnabled)
+                return;
+
+            if (_optionsProvider.RuntimeClrEnabled)
+                builder.Append(" clr");
+
+            if (_optionsProvider.RuntimeCoreEnabled)
+                builder.Append(" core");
+
+            if (_optionsProvider.RuntimeMonoEnabled)
+                builder.Append(" mono");
+
+            if (_optionsProvider.RuntimeCoreRTEnabled)
+                builder.Append(" corert");
+        }
+
+        private void AddDiagnoserArguments(StringBuilder builder)
+        {
+            if (_optionsProvider.IsMemoryDiagnoserEnabled)
+                builder.Append(" -m");
+
+            if (_optionsProvider.IsDisassemblyDiagnoserEnabled)
+                builder.Append(" -d");
+
+            if (_optionsProvider.IsEtwProfilerEnabled)
+                builder.Append(" -p ETW");
+        }
+
+        private void AddExporterArguments(StringBuilder builder)
+        {
+            builder.Append(" -e markdown");
+
+            if (_optionsProvider.ExporterCsvEnabled)
+                builder.Append(" csv");
+
+            if (_optionsProvider.ExporterCsvMeasurementsEnabled)
+                builder.Append(" csvmeasurements");
+
+            if (_optionsProvider.ExporterHtmlEnabled)
+                builder.Append(" html");
+
+            if (_optionsProvider.ExporterMarkdownAtlassianEnabled)
+                builder.Append(" atlassian");
+
+            if (_optionsProvider.ExporterMarkdownStackOverflowEnabled)
+                builder.Append(" stackoverflow");
+
+            if (_optionsProvider.ExporterMarkdownGitHubEnabled)
+                builder.Append(" github");
+
+            if (_optionsProvider.ExporterPlainEnabled)
+                builder.Append(" plain");
+
+            if (_optionsProvider.ExporterRPlotEnabled)
+                builder.Append(" rplot");
+
+            if (_optionsProvider.ExporterJsonDefaultEnabled)
+                builder.Append(" json");
+
+            if (_optionsProvider.ExporterJsonBriefEnabled)
+                builder.Append(" briefjson");
+
+            if (_optionsProvider.ExporterJsonFullEnabled)
+                builder.Append(" fulljson");
+
+            if (_optionsProvider.ExporterAsciiDocEnabled)
+                builder.Append(" asciidoc");
+
+            if (_optionsProvider.ExporterXmlDefaultEnabled)
+                builder.Append(" xml");
+
+            if (_optionsProvider.ExporterXmlBriefEnabled)
+                builder.Append(" briefxml");
+
+            if (_optionsProvider.ExporterXmlFullEnabled)
+                builder.Append(" fullxml");
         }
 
         private bool IsMultiTargetProject()

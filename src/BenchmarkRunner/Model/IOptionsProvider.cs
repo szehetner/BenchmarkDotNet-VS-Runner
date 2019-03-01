@@ -12,5 +12,26 @@ namespace BenchmarkRunner.Model
         bool IsMemoryDiagnoserEnabled { get; }
         bool IsDisassemblyDiagnoserEnabled { get;  }
         bool IsEtwProfilerEnabled { get; }
+
+        bool RuntimeClrEnabled { get; }
+        bool RuntimeCoreEnabled { get; }
+        bool RuntimeMonoEnabled { get; }
+        bool RuntimeCoreRTEnabled { get; }
+
+        bool ExporterCsvEnabled { get; }
+        bool ExporterCsvMeasurementsEnabled { get; }
+        bool ExporterHtmlEnabled { get; }
+        bool ExporterMarkdownAtlassianEnabled { get; }
+        bool ExporterMarkdownStackOverflowEnabled { get; }
+        bool ExporterMarkdownGitHubEnabled { get; }
+        bool ExporterPlainEnabled { get; }
+        bool ExporterRPlotEnabled { get; }
+        bool ExporterJsonDefaultEnabled { get; }
+        bool ExporterJsonBriefEnabled { get; }
+        bool ExporterJsonFullEnabled { get; }
+        bool ExporterAsciiDocEnabled { get; }
+        bool ExporterXmlDefaultEnabled { get; }
+        bool ExporterXmlBriefEnabled { get; }
+        bool ExporterXmlFullEnabled { get; }
     }
 }
