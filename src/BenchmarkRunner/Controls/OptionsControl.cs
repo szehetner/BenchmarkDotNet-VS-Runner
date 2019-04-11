@@ -49,6 +49,7 @@ namespace BenchmarkRunner.Controls
             chkXmlDefault.Checked = OptionsPage.ExporterXmlDefaultEnabled;
             chkXmlBrief.Checked = OptionsPage.ExporterXmlBriefEnabled;
             chkXmlFull.Checked = OptionsPage.ExporterXmlFullEnabled;
+            txtCommandLine.Text = OptionsPage.CommandlineParameters;
         }
 
         private void OptionsControl_Changed(object sender, EventArgs e)
@@ -65,7 +66,6 @@ namespace BenchmarkRunner.Controls
             OptionsPage.ExporterCsvEnabled = chkCsv.Checked;
             OptionsPage.ExporterCsvMeasurementsEnabled = chkCsvMeasurements.Checked;
             OptionsPage.ExporterHtmlEnabled = chkHtml.Checked;
-            //OptionsPage.ExporterMarkdownDefaultEnabled = chkMarkdownDefault.Checked;
             OptionsPage.ExporterMarkdownAtlassianEnabled = chkMarkdownAtlassian.Checked;
             OptionsPage.ExporterMarkdownStackOverflowEnabled = chkMarkdownStackOverflow.Checked;
             OptionsPage.ExporterMarkdownGitHubEnabled = chkMarkdownGitHub.Checked;
@@ -78,6 +78,7 @@ namespace BenchmarkRunner.Controls
             OptionsPage.ExporterXmlDefaultEnabled = chkXmlDefault.Checked;
             OptionsPage.ExporterXmlBriefEnabled = chkXmlBrief.Checked;
             OptionsPage.ExporterXmlFullEnabled = chkXmlFull.Checked;
+            OptionsPage.CommandlineParameters = txtCommandLine.Text;
         }
 
         private void lnkHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

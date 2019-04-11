@@ -163,7 +163,7 @@ namespace BenchmarkRunner
             string baseName = name;
             var parenthesisIndex = name.IndexOf('(');
             if (parenthesisIndex != -1)
-                baseName = name.Substring(0, parenthesisIndex);
+                baseName = name.Substring(0, parenthesisIndex).TrimEnd();
 
             foreach (EnvDTE.Project project in dte2.Solution.Projects)
             {
