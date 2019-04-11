@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="BenchmarkRunner.e149c890-71cb-46b2-8470-af293864a71e" Version="0.8.1" Language="en-US" Publisher="Stephan Zehetner" />
+        <Identity Id="BenchmarkRunner.e149c890-71cb-46b2-8470-af293864a71e" Version="0.9.0" Language="en-US" Publisher="Stephan Zehetner" />
         <DisplayName>Benchmark Runner</DisplayName>
         <Description xml:space="preserve">Explore and run BenchmarkDotNet benchmarks from within Visual Studio</Description>
         <ReleaseNotes>https://github.com/szehetner/BenchmarkDotNet-VS-Runner/blob/master/ReleaseHistory.md</ReleaseNotes>
